@@ -8,21 +8,26 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Table(name = "brands")
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity // It is a database entity
-public class Brand {
+@AllArgsConstructor
+@Entity
+@Table(name = "models")
+public class Model {
+    @Id
     @Column(name = "id")
-    @Id // Primary Key
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "brand")
-    List<Model> models;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @OneToMany(mappedBy = "model")
+    private List<Car> cars;
 }

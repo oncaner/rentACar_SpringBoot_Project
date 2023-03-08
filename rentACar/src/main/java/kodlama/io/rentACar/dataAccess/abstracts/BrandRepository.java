@@ -4,5 +4,5 @@ import kodlama.io.rentACar.entities.concretes.Brand;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BrandRepository extends JpaRepository<Brand, Integer> { // Integer --> Primary key is a integer.
-
+    boolean existsByName(String name);
 }
