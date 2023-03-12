@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class Model {
 
     @ManyToOne
     @JoinColumn(name = "brand_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Brand brand;
 
     @OneToMany(mappedBy = "model")

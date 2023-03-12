@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateModelRequest {
+public class UpdateModelRequest {
+
+    @NotNull
+    private int id;
+
     @NotNull
     @NotBlank
     @Size(min = 3, max = 20)
     private String name;
-    @NotNull
-    private int brandId;
+
 }
