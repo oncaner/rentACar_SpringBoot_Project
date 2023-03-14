@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 
 @SpringBootApplication
-@RestControllerAdvice
+@RestControllerAdvice // for Exceptions
 public class RentACarApplication {
     public static void main(String[] args) {
         SpringApplication.run(RentACarApplication.class, args);
@@ -29,6 +31,24 @@ public class RentACarApplication {
     public ProblemDetails handleBusinessException(BusinessException businessException) {
         ProblemDetails problemDetails = new ProblemDetails();
         problemDetails.setMessage(businessException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage("No data matching the entered value was found!");
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleNoSuchElementException(NoSuchElementException noSuchElementException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(noSuchElementException.getMessage());
 
         return problemDetails;
     }

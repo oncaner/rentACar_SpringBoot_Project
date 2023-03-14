@@ -5,6 +5,7 @@ import kodlama.io.rentACar.business.requests.CreateModelRequest;
 import kodlama.io.rentACar.business.requests.UpdateModelRequest;
 import kodlama.io.rentACar.business.responses.GetAllModelsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdModelResponse;
+import kodlama.io.rentACar.business.rules.ModelBusinessRules;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
 import kodlama.io.rentACar.dataAccess.abstracts.ModelRepository;
 import kodlama.io.rentACar.entities.concretes.Model;
@@ -20,6 +21,7 @@ public class ModelManager implements ModelService {
 
     private ModelRepository modelRepository;
     private ModelMapperService modelMapperService;
+    private ModelBusinessRules modelBusinessRules;
 
     @Override
     public List<GetAllModelsResponse> getAll() {
@@ -41,6 +43,8 @@ public class ModelManager implements ModelService {
 
     @Override
     public void add(CreateModelRequest createModelRequest) {
+        this.modelBusinessRules.checkIfModelNameExists(createModelRequest.getName());
+
         Model model = this.modelMapperService.forRequest().map(createModelRequest, Model.class);
 
         this.modelRepository.save(model);
