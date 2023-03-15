@@ -31,6 +31,6 @@ public class Model {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Brand brand;
 
-    @OneToMany(mappedBy = "model")
+    @OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
     private List<Car> cars;
 }
