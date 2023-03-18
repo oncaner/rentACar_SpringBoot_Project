@@ -5,7 +5,9 @@ import kodlama.io.rentACar.business.requests.CreateModelRequest;
 import kodlama.io.rentACar.business.requests.UpdateModelRequest;
 import kodlama.io.rentACar.business.responses.GetAllModelsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdModelResponse;
+import kodlama.io.rentACar.business.rules.BrandBusinessRules;
 import kodlama.io.rentACar.business.rules.ModelBusinessRules;
+import kodlama.io.rentACar.core.utilities.exceptions.ModelNotFoundException;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
 import kodlama.io.rentACar.dataAccess.abstracts.ModelRepository;
 import kodlama.io.rentACar.entities.concretes.Model;
@@ -22,6 +24,7 @@ public class ModelManager implements ModelService {
     private ModelRepository modelRepository;
     private ModelMapperService modelMapperService;
     private ModelBusinessRules modelBusinessRules;
+    private BrandBusinessRules brandBusinessRules;
 
     @Override
     public List<GetAllModelsResponse> getAll() {
@@ -34,7 +37,7 @@ public class ModelManager implements ModelService {
 
     @Override
     public GetByIdModelResponse getById(int id) {
-        Model model = this.modelRepository.findById(id).orElseThrow();
+        Model model = this.modelRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(String.format("Model not found with: %d", id)));
 
         GetByIdModelResponse modelResponse = this.modelMapperService.forResponse().map(model, GetByIdModelResponse.class);
 
@@ -44,6 +47,7 @@ public class ModelManager implements ModelService {
     @Override
     public void add(CreateModelRequest createModelRequest) {
         this.modelBusinessRules.checkIfModelNameExists(createModelRequest.getName());
+        this.brandBusinessRules.checkIfBrandIdNotExists(createModelRequest.getBrandId());
 
         Model model = this.modelMapperService.forRequest().map(createModelRequest, Model.class);
 
@@ -57,6 +61,9 @@ public class ModelManager implements ModelService {
 
     @Override
     public void update(UpdateModelRequest updateModelRequest) {
+        this.modelBusinessRules.checkIfModelIdNotExists(updateModelRequest.getId());
+        this.brandBusinessRules.checkIfBrandIdNotExists(updateModelRequest.getBrandId());
+
         Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
 
         this.modelRepository.save(model);

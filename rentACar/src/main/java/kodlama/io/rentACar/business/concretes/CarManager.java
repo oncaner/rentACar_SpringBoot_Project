@@ -6,6 +6,8 @@ import kodlama.io.rentACar.business.requests.UpdateCarRequest;
 import kodlama.io.rentACar.business.responses.GetAllCarsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdCarResponse;
 import kodlama.io.rentACar.business.rules.CarBusinessRules;
+import kodlama.io.rentACar.business.rules.ModelBusinessRules;
+import kodlama.io.rentACar.core.utilities.exceptions.CarNotFoundException;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
 import kodlama.io.rentACar.dataAccess.abstracts.CarRepository;
 import kodlama.io.rentACar.entities.concretes.Car;
@@ -22,6 +24,7 @@ public class CarManager implements CarService {
     private CarRepository carRepository;
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
+    private ModelBusinessRules modelBusinessRules;
 
     @Override
     public List<GetAllCarsResponse> getAll() {
@@ -35,7 +38,7 @@ public class CarManager implements CarService {
 
     @Override
     public GetByIdCarResponse getById(int id) {
-        Car car = carRepository.findById(id).orElseThrow();
+        Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(String.format("Car not found with: %d", id)));
         GetByIdCarResponse carResponse = this.modelMapperService.forResponse().map(car, GetByIdCarResponse.class);
 
         return carResponse;
@@ -44,6 +47,7 @@ public class CarManager implements CarService {
     @Override
     public void add(CreateCarRequest createCarRequest) {
         this.carBusinessRules.checkIfPlateExists(createCarRequest.getPlate());
+        this.modelBusinessRules.checkIfModelIdNotExists(createCarRequest.getModelId());
 
         Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 
@@ -52,6 +56,9 @@ public class CarManager implements CarService {
 
     @Override
     public void update(UpdateCarRequest updateCarRequest) {
+        this.carBusinessRules.checkIfCarIdNotExists(updateCarRequest.getId());
+        this.modelBusinessRules.checkIfModelIdNotExists(updateCarRequest.getModelId());
+
         Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
 
         this.carRepository.save(car);
