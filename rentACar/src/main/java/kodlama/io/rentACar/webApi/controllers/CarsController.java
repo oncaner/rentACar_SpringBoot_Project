@@ -2,8 +2,7 @@ package kodlama.io.rentACar.webApi.controllers;
 
 import jakarta.validation.Valid;
 import kodlama.io.rentACar.business.abstracts.CarService;
-import kodlama.io.rentACar.business.requests.CreateCarRequest;
-import kodlama.io.rentACar.business.requests.UpdateCarRequest;
+import kodlama.io.rentACar.business.requests.*;
 import kodlama.io.rentACar.business.responses.GetAllCarsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdCarResponse;
 import lombok.AllArgsConstructor;
@@ -43,5 +42,25 @@ public class CarsController {
     @PutMapping()
     public void update(@RequestBody @Valid UpdateCarRequest updateCarRequest) {
         this.carService.update(updateCarRequest);
+    }
+
+    @PatchMapping("/update-with-plate")
+    public void updateWithPlate(@RequestBody @Valid UpdateCarWithPlateRequest updateCarWithPlateRequest){
+        this.carService.updateCarWithPlate(updateCarWithPlateRequest);
+    }
+
+    @PatchMapping("update-with-daily-price")
+    public void updateWithDailyPrice(@RequestBody @Valid UpdateCarWithDailyPrice updateCarWithDailyPrice){
+        this.carService.updateCarWithDailyPrice(updateCarWithDailyPrice);
+    }
+
+    @PatchMapping("update-with-model-year")
+    public void updateWithModelYear(@RequestBody @Valid UpdateCarWithModelYear updateCarWithModelYear){
+        this.carService.updateCarWithModelYear(updateCarWithModelYear);
+    }
+
+    @PatchMapping("update-with-state")
+    public void updateWithState(@RequestBody @Valid UpdateCarWithState updateCarWithState){
+        this.carService.updateCarWithState(updateCarWithState);
     }
 }

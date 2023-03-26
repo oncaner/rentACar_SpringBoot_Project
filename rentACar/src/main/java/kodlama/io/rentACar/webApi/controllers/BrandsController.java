@@ -35,7 +35,7 @@ public class BrandsController {
     }
 
     @PutMapping()
-    public void update(@RequestBody UpdateBrandRequest updateBrandRequest) {
+    public void update(@RequestBody @Valid UpdateBrandRequest updateBrandRequest) {
         this.brandService.update(updateBrandRequest);
     }
 

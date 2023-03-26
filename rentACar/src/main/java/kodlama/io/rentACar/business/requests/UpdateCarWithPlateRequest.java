@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCarRequest {
+public class UpdateCarWithPlateRequest {
 
     @NotNull
     private int id;
@@ -17,14 +17,4 @@ public class UpdateCarRequest {
     @NotNull
     @NotBlank
     private String plate;
-
-    @NotNull
-    private double dailyPrice;
-
-    @NotNull
-    private int modelYear;
-
-    @NotNull
-    private int state;
-
 }

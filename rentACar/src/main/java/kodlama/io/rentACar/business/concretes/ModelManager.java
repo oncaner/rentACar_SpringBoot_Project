@@ -9,7 +9,9 @@ import kodlama.io.rentACar.business.rules.BrandBusinessRules;
 import kodlama.io.rentACar.business.rules.ModelBusinessRules;
 import kodlama.io.rentACar.core.utilities.exceptions.ModelNotFoundException;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
+import kodlama.io.rentACar.dataAccess.abstracts.BrandRepository;
 import kodlama.io.rentACar.dataAccess.abstracts.ModelRepository;
+import kodlama.io.rentACar.entities.concretes.Brand;
 import kodlama.io.rentACar.entities.concretes.Model;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class ModelManager implements ModelService {
 
     private ModelRepository modelRepository;
+    private BrandRepository brandRepository;
     private ModelMapperService modelMapperService;
     private ModelBusinessRules modelBusinessRules;
     private BrandBusinessRules brandBusinessRules;
@@ -62,9 +65,12 @@ public class ModelManager implements ModelService {
     @Override
     public void update(UpdateModelRequest updateModelRequest) {
         this.modelBusinessRules.checkIfModelIdNotExists(updateModelRequest.getId());
-        this.brandBusinessRules.checkIfBrandIdNotExists(updateModelRequest.getBrandId());
+
+        Model oldModel = modelRepository.findById(updateModelRequest.getId()).orElseThrow();
+        Brand brand = brandRepository.findById(oldModel.getBrand().getId()).orElseThrow();
 
         Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
+        model.setBrand(brand);
 
         this.modelRepository.save(model);
     }

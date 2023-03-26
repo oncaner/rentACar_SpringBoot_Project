@@ -41,7 +41,7 @@ public class ModelsController {
     }
 
     @PutMapping()
-    public void update(@RequestBody UpdateModelRequest updateModelRequest) {
+    public void update(@RequestBody @Valid UpdateModelRequest updateModelRequest) {
         this.modelService.update(updateModelRequest);
     }
 
