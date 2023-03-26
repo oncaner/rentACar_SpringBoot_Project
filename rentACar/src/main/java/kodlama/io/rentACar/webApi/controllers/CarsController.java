@@ -3,6 +3,8 @@ package kodlama.io.rentACar.webApi.controllers;
 import jakarta.validation.Valid;
 import kodlama.io.rentACar.business.abstracts.CarService;
 import kodlama.io.rentACar.business.requests.*;
+import kodlama.io.rentACar.business.responses.GetAllCarsByBrandIdResponse;
+import kodlama.io.rentACar.business.responses.GetAllCarsByModelIdResponse;
 import kodlama.io.rentACar.business.responses.GetAllCarsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdCarResponse;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,16 @@ public class CarsController {
     @GetMapping()
     public List<GetAllCarsResponse> getAll() {
         return carService.getAll();
+    }
+
+    @GetMapping("/get-all-by-model-id/{id}")
+    public List<GetAllCarsByModelIdResponse> getAllByModelId(@PathVariable int id) {
+        return carService.getAllByModelId(id);
+    }
+
+    @GetMapping("/get-all-by-brand-id/{id}")
+    public List<GetAllCarsByBrandIdResponse> getAllByBrandId(@PathVariable int id) {
+        return carService.getAllByBrandId(id);
     }
 
     @PostMapping()

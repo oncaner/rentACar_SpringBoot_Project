@@ -2,8 +2,11 @@ package kodlama.io.rentACar.business.concretes;
 
 import kodlama.io.rentACar.business.abstracts.CarService;
 import kodlama.io.rentACar.business.requests.*;
+import kodlama.io.rentACar.business.responses.GetAllCarsByBrandIdResponse;
+import kodlama.io.rentACar.business.responses.GetAllCarsByModelIdResponse;
 import kodlama.io.rentACar.business.responses.GetAllCarsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdCarResponse;
+import kodlama.io.rentACar.business.rules.BrandBusinessRules;
 import kodlama.io.rentACar.business.rules.CarBusinessRules;
 import kodlama.io.rentACar.business.rules.ModelBusinessRules;
 import kodlama.io.rentACar.core.utilities.exceptions.CarNotFoundException;
@@ -27,6 +30,7 @@ public class CarManager implements CarService {
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
     private ModelBusinessRules modelBusinessRules;
+    private BrandBusinessRules brandBusinessRules;
 
     @Override
     public List<GetAllCarsResponse> getAll() {
@@ -36,6 +40,32 @@ public class CarManager implements CarService {
         List<GetAllCarsResponse> carsResponses = cars.stream().map(car -> this.modelMapperService.forResponse().map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
 
         return carsResponses;
+    }
+
+    @Override
+    public List<GetAllCarsByModelIdResponse> getAllByModelId(int id) {
+        this.modelBusinessRules.checkIfModelIdNotExists(id);
+
+        List<Car> cars = carRepository.findAllByModelId(id);
+
+        List<GetAllCarsByModelIdResponse> carsResponse = cars.stream()
+                .map(car -> this.modelMapperService.forResponse()
+                        .map(car, GetAllCarsByModelIdResponse.class)).toList();
+
+        return carsResponse;
+    }
+
+    @Override
+    public List<GetAllCarsByBrandIdResponse> getAllByBrandId(int id) {
+        this.brandBusinessRules.checkIfBrandIdNotExists(id);
+
+        List<Car> cars = carRepository.findAllByBrandId(id);
+
+        List<GetAllCarsByBrandIdResponse> carsResponse = cars.stream()
+                .map(car -> this.modelMapperService.forResponse()
+                        .map(car, GetAllCarsByBrandIdResponse.class)).toList();
+
+        return carsResponse;
     }
 
     @Override
