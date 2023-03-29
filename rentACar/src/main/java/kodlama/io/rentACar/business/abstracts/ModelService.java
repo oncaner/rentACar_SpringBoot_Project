@@ -4,6 +4,7 @@ import kodlama.io.rentACar.business.requests.CreateModelRequest;
 import kodlama.io.rentACar.business.requests.UpdateModelRequest;
 import kodlama.io.rentACar.business.responses.GetAllModelsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdModelResponse;
+import kodlama.io.rentACar.entities.concretes.Model;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface ModelService {
 
     GetByIdModelResponse getById(int id);
 
-    void add(CreateModelRequest createModelRequest);
+    Model create(CreateModelRequest createModelRequest);
 
-    void update(UpdateModelRequest updateModelRequest);
+    Model update(UpdateModelRequest updateModelRequest);
 
     void delete(int id);
 

@@ -5,6 +5,7 @@ import kodlama.io.rentACar.business.responses.GetAllCarsByBrandIdResponse;
 import kodlama.io.rentACar.business.responses.GetAllCarsByModelIdResponse;
 import kodlama.io.rentACar.business.responses.GetAllCarsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdCarResponse;
+import kodlama.io.rentACar.entities.concretes.Car;
 
 import java.util.List;
 
@@ -17,17 +18,17 @@ public interface CarService {
 
     GetByIdCarResponse getById(int id);
 
-    void add(CreateCarRequest createCarRequest);
+    Car create(CreateCarRequest createCarRequest);
 
-    void update(UpdateCarRequest updateCarRequest);
+    Car update(UpdateCarRequest updateCarRequest);
 
-    void updateCarWithPlate(UpdateCarWithPlateRequest updateCarWithPlateRequest);
+    Car updateByPlate(UpdateCarByPlateRequest updateCarByPlateRequest);
 
-    void updateCarWithDailyPrice(UpdateCarWithDailyPrice updateCarWithDailyPrice);
+    Car updateByDailyPrice(UpdateCarByDailyPrice updateCarByDailyPrice);
 
-    void updateCarWithModelYear(UpdateCarWithModelYear updateCarWithModelYear);
+    Car updateByModelYear(UpdateCarByModelYearRequest updateCarWithModelYear);
 
-    void updateCarWithState(UpdateCarWithState updateCarWithState);
+    Car updateByState(UpdateCarByStateRequest updateCarByStateRequest);
 
     void delete(int id);
 }

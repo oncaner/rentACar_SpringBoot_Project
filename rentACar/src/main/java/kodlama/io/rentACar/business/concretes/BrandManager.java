@@ -27,7 +27,9 @@ public class BrandManager implements BrandService {
     public List<GetAllBrandsResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
 
-        List<GetAllBrandsResponse> brandsResponse = brands.stream().map(brand -> this.modelMapperService.forResponse().map(brand, GetAllBrandsResponse.class)).collect(Collectors.toList());
+        List<GetAllBrandsResponse> brandsResponse = brands.stream()
+                .map(brand -> this.modelMapperService.forResponse()
+                        .map(brand, GetAllBrandsResponse.class)).collect(Collectors.toList());
 
         return brandsResponse;
     }
@@ -41,24 +43,27 @@ public class BrandManager implements BrandService {
     }
 
     @Override
-    public void add(CreateBrandRequest createBrandRequest) {
-
+    public Brand create(CreateBrandRequest createBrandRequest) {
         this.brandBusinessRules.checkIfBrandNameExists(createBrandRequest.getName());
 
         Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 
-        this.brandRepository.save(brand);
+        return this.brandRepository.save(brand);
     }
 
     @Override
-    public void update(UpdateBrandRequest updateBrandRequest) {
+    public Brand update(UpdateBrandRequest updateBrandRequest) {
         this.brandBusinessRules.checkIfBrandIdNotExists(updateBrandRequest.getId());
+
         Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
-        this.brandRepository.save(brand);
+
+        return this.brandRepository.save(brand);
     }
 
     @Override
     public void delete(int id) {
+        this.brandBusinessRules.checkIfBrandIdNotExists(id);
+
         this.brandRepository.deleteById(id);
     }
 

@@ -31,9 +31,11 @@ public class ModelManager implements ModelService {
 
     @Override
     public List<GetAllModelsResponse> getAll() {
-        List<Model> models = modelRepository.findAll();
+        List<Model> models = this.modelRepository.findAll();
 
-        List<GetAllModelsResponse> modelsResponse = models.stream().map(model -> this.modelMapperService.forResponse().map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
+        List<GetAllModelsResponse> modelsResponse = models.stream()
+                .map(model -> this.modelMapperService.forResponse()
+                        .map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
 
         return modelsResponse;
     }
@@ -48,30 +50,34 @@ public class ModelManager implements ModelService {
     }
 
     @Override
-    public void add(CreateModelRequest createModelRequest) {
+    public Model create(CreateModelRequest createModelRequest) {
         this.modelBusinessRules.checkIfModelNameExists(createModelRequest.getName());
         this.brandBusinessRules.checkIfBrandIdNotExists(createModelRequest.getBrandId());
 
         Model model = this.modelMapperService.forRequest().map(createModelRequest, Model.class);
 
-        this.modelRepository.save(model);
+        return this.modelRepository.save(model);
     }
 
     @Override
-    public void delete(int id) {
-        this.modelRepository.deleteById(id);
-    }
-
-    @Override
-    public void update(UpdateModelRequest updateModelRequest) {
+    public Model update(UpdateModelRequest updateModelRequest) {
         this.modelBusinessRules.checkIfModelIdNotExists(updateModelRequest.getId());
 
-        Model oldModel = modelRepository.findById(updateModelRequest.getId()).orElseThrow();
-        Brand brand = brandRepository.findById(oldModel.getBrand().getId()).orElseThrow();
+        Model oldModel = this.modelRepository.findById(updateModelRequest.getId()).orElseThrow();
+        Brand brand = this.brandRepository.findById(oldModel.getBrand().getId()).orElseThrow();
 
         Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
         model.setBrand(brand);
 
-        this.modelRepository.save(model);
+        return this.modelRepository.save(model);
     }
+
+    @Override
+    public void delete(int id) {
+        this.modelBusinessRules.checkIfModelIdNotExists(id);
+
+        this.modelRepository.deleteById(id);
+    }
+
+
 }

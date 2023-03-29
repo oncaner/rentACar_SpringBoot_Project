@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCarWithState {
+public class UpdateCarByStateRequest {
 
     @NotNull
     private int id;

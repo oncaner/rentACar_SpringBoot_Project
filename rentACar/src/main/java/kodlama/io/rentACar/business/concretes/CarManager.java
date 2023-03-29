@@ -34,8 +34,7 @@ public class CarManager implements CarService {
 
     @Override
     public List<GetAllCarsResponse> getAll() {
-
-        List<Car> cars = carRepository.findAll();
+        List<Car> cars = this.carRepository.findAll();
 
         List<GetAllCarsResponse> carsResponses = cars.stream().map(car -> this.modelMapperService.forResponse().map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
 
@@ -46,11 +45,9 @@ public class CarManager implements CarService {
     public List<GetAllCarsByModelIdResponse> getAllByModelId(int id) {
         this.modelBusinessRules.checkIfModelIdNotExists(id);
 
-        List<Car> cars = carRepository.findAllByModelId(id);
+        List<Car> cars = this.carRepository.findAllByModelId(id);
 
-        List<GetAllCarsByModelIdResponse> carsResponse = cars.stream()
-                .map(car -> this.modelMapperService.forResponse()
-                        .map(car, GetAllCarsByModelIdResponse.class)).toList();
+        List<GetAllCarsByModelIdResponse> carsResponse = cars.stream().map(car -> this.modelMapperService.forResponse().map(car, GetAllCarsByModelIdResponse.class)).toList();
 
         return carsResponse;
     }
@@ -59,7 +56,7 @@ public class CarManager implements CarService {
     public List<GetAllCarsByBrandIdResponse> getAllByBrandId(int id) {
         this.brandBusinessRules.checkIfBrandIdNotExists(id);
 
-        List<Car> cars = carRepository.findAllByBrandId(id);
+        List<Car> cars = this.carRepository.findAllByBrandId(id);
 
         List<GetAllCarsByBrandIdResponse> carsResponse = cars.stream()
                 .map(car -> this.modelMapperService.forResponse()
@@ -70,78 +67,80 @@ public class CarManager implements CarService {
 
     @Override
     public GetByIdCarResponse getById(int id) {
-        Car car = carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(String.format("Car not found with: %d", id)));
+        Car car = this.carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(String.format("Car not found with: %d", id)));
         GetByIdCarResponse carResponse = this.modelMapperService.forResponse().map(car, GetByIdCarResponse.class);
 
         return carResponse;
     }
 
     @Override
-    public void add(CreateCarRequest createCarRequest) {
+    public Car create(CreateCarRequest createCarRequest) {
         this.carBusinessRules.checkIfPlateExists(createCarRequest.getPlate());
         this.modelBusinessRules.checkIfModelIdNotExists(createCarRequest.getModelId());
 
         Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 
-        this.carRepository.save(car);
+        return this.carRepository.save(car);
     }
 
     @Override
-    public void update(UpdateCarRequest updateCarRequest) {
+    public Car update(UpdateCarRequest updateCarRequest) {
         this.carBusinessRules.checkIfCarIdNotExists(updateCarRequest.getId());
 
-        Car oldCar = carRepository.findById(updateCarRequest.getId()).orElseThrow();
-        Model model = modelRepository.findById(oldCar.getModel().getId()).orElseThrow();
+        Car oldCar = this.carRepository.findById(updateCarRequest.getId()).orElseThrow();
+        Model model = this.modelRepository.findById(oldCar.getModel().getId()).orElseThrow();
 
         Car updateCar = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
         updateCar.setModel(model);
 
-        this.carRepository.save(updateCar);
+        return this.carRepository.save(updateCar);
     }
 
     @Override
-    public void updateCarWithPlate(UpdateCarWithPlateRequest updateCarWithPlateRequest) {
-        this.carBusinessRules.checkIfCarIdNotExists(updateCarWithPlateRequest.getId());
-        this.carBusinessRules.checkIfPlateExists(updateCarWithPlateRequest.getPlate());
+    public Car updateByPlate(UpdateCarByPlateRequest updateCarByPlateRequest) {
+        this.carBusinessRules.checkIfCarIdNotExists(updateCarByPlateRequest.getId());
+        this.carBusinessRules.checkIfPlateExists(updateCarByPlateRequest.getPlate());
 
-        Car car = carRepository.findById(updateCarWithPlateRequest.getId()).orElseThrow();
-        car.setPlate(updateCarWithPlateRequest.getPlate());
+        Car car = this.carRepository.findById(updateCarByPlateRequest.getId()).orElseThrow();
+        car.setPlate(updateCarByPlateRequest.getPlate());
 
-        carRepository.save(car);
+        return this.carRepository.save(car);
     }
 
     @Override
-    public void updateCarWithDailyPrice(UpdateCarWithDailyPrice updateCarWithDailyPrice) {
-        this.carBusinessRules.checkIfCarIdNotExists(updateCarWithDailyPrice.getId());
+    public Car updateByDailyPrice(UpdateCarByDailyPrice updateCarByDailyPrice) {
+        this.carBusinessRules.checkIfCarIdNotExists(updateCarByDailyPrice.getId());
 
-        Car car = carRepository.findById(updateCarWithDailyPrice.getId()).orElseThrow();
-        car.setDailyPrice(updateCarWithDailyPrice.getDailyPrice());
+        Car car = carRepository.findById(updateCarByDailyPrice.getId()).orElseThrow();
+        car.setDailyPrice(updateCarByDailyPrice.getDailyPrice());
 
-        carRepository.save(car);
+        return this.carRepository.save(car);
     }
 
     @Override
-    public void updateCarWithModelYear(UpdateCarWithModelYear updateCarWithModelYear) {
-        this.carBusinessRules.checkIfCarIdNotExists(updateCarWithModelYear.getId());
+    public Car updateByModelYear(UpdateCarByModelYearRequest updateCarByModelYearRequest) {
+        this.carBusinessRules.checkIfCarIdNotExists(updateCarByModelYearRequest.getId());
 
-        Car car = carRepository.findById(updateCarWithModelYear.getId()).orElseThrow();
-        car.setModelYear(updateCarWithModelYear.getModelYear());
+        Car car = this.carRepository.findById(updateCarByModelYearRequest.getId()).orElseThrow();
+        car.setModelYear(updateCarByModelYearRequest.getModelYear());
 
-        carRepository.save(car);
+        return this.carRepository.save(car);
     }
 
     @Override
-    public void updateCarWithState(UpdateCarWithState updateCarWithState) {
-        this.carBusinessRules.checkIfCarIdNotExists(updateCarWithState.getId());
+    public Car updateByState(UpdateCarByStateRequest updateCarByStateRequest) {
+        this.carBusinessRules.checkIfCarIdNotExists(updateCarByStateRequest.getId());
 
-        Car car = carRepository.findById(updateCarWithState.getId()).orElseThrow();
-        car.setState(updateCarWithState.getState());
+        Car car = this.carRepository.findById(updateCarByStateRequest.getId()).orElseThrow();
+        car.setState(updateCarByStateRequest.getState());
 
-        carRepository.save(car);
+        return this.carRepository.save(car);
     }
 
     @Override
     public void delete(int id) {
+        this.carBusinessRules.checkIfCarIdNotExists(id);
+
         this.carRepository.deleteById(id);
     }
 }

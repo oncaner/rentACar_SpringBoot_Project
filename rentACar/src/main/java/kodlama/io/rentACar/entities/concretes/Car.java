@@ -1,5 +1,6 @@
 package kodlama.io.rentACar.entities.concretes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Car {
     private int state; // 1 - Available 2 - Rented  3 - Maintenance
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "model_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Model model;

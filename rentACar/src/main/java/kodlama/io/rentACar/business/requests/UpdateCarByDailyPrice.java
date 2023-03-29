@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCarWithDailyPrice {
+public class UpdateCarByDailyPrice {
     @NotNull
     private int id;
 
