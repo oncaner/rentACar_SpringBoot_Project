@@ -4,17 +4,11 @@ import kodlama.io.rentACar.businessrules.BrandBusinessRules;
 import kodlama.io.rentACar.businessrules.CarBusinessRules;
 import kodlama.io.rentACar.businessrules.ModelBusinessRules;
 import kodlama.io.rentACar.config.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.requests.CreateCarRequest;
-import kodlama.io.rentACar.dto.requests.UpdateCarByDailyPriceRequest;
-import kodlama.io.rentACar.dto.requests.UpdateCarByPlateRequest;
-import kodlama.io.rentACar.dto.requests.UpdateCarByStateRequest;
-import kodlama.io.rentACar.dto.requests.UpdateCarRequest;
-import kodlama.io.rentACar.dto.requests.UpdateCarByModelYearRequest;
+import kodlama.io.rentACar.dto.requests.*;
 import kodlama.io.rentACar.dto.responses.GetAllCarsByBrandIdResponse;
 import kodlama.io.rentACar.dto.responses.GetAllCarsByModelIdResponse;
 import kodlama.io.rentACar.dto.responses.GetAllCarsResponse;
 import kodlama.io.rentACar.dto.responses.GetByIdCarResponse;
-import kodlama.io.rentACar.exception.CarNotFoundException;
 import kodlama.io.rentACar.model.Car;
 import kodlama.io.rentACar.model.Model;
 import kodlama.io.rentACar.repository.CarRepository;
@@ -75,7 +69,9 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public GetByIdCarResponse getById(int id) {
-        Car car = this.carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(String.format("Car not found with: %d", id)));
+        this.carBusinessRules.checkIfCarIdNotExists(id);
+
+        Car car = this.carRepository.findById(id).orElseThrow();
         GetByIdCarResponse carResponse = this.modelMapperService.forResponse().map(car, GetByIdCarResponse.class);
 
         return carResponse;
@@ -94,6 +90,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car update(UpdateCarRequest updateCarRequest) {
         this.carBusinessRules.checkIfCarIdNotExists(updateCarRequest.getId());
+        this.carBusinessRules.checkIfPlateExists(updateCarRequest.getPlate());
 
         Car oldCar = this.carRepository.findById(updateCarRequest.getId()).orElseThrow();
         Model model = this.modelRepository.findById(oldCar.getModel().getId()).orElseThrow();

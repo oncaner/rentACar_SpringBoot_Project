@@ -25,10 +25,28 @@ public class ExceptionsHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleBrandNameExistsException(BrandNameExistsException brandNameExistsException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(brandNameExistsException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ProblemDetails handleCarNotFoundException(CarNotFoundException carNotFoundException) {
         ProblemDetails problemDetails = new ProblemDetails();
         problemDetails.setMessage(carNotFoundException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleCarPlateExistsException(CarPlateExistsException carPlateExistsException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(carPlateExistsException.getMessage());
 
         return problemDetails;
     }
@@ -44,9 +62,9 @@ public class ExceptionsHandler {
 
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-    public ProblemDetails handleBusinessException(BusinessException businessException) {
+    public ProblemDetails handleModelNameExistsException(ModelNameExistsException modelNameExistsException) {
         ProblemDetails problemDetails = new ProblemDetails();
-        problemDetails.setMessage(businessException.getMessage());
+        problemDetails.setMessage(modelNameExistsException.getMessage());
 
         return problemDetails;
     }

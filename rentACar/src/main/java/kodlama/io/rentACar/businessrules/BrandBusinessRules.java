@@ -1,7 +1,7 @@
 package kodlama.io.rentACar.businessrules;
 
+import kodlama.io.rentACar.exception.BrandNameExistsException;
 import kodlama.io.rentACar.exception.BrandNotFoundException;
-import kodlama.io.rentACar.exception.BusinessException;
 import kodlama.io.rentACar.repository.BrandRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class BrandBusinessRules {
 
     public void checkIfBrandNameExists(String name) {
         if (this.brandRepository.existsByName(name)) {
-            throw new BusinessException("Brand name already exists");
+            throw new BrandNameExistsException(String.format("Brand name already exists with: %s", name));
         }
     }
 

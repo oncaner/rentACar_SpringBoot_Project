@@ -54,6 +54,7 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public Brand update(UpdateBrandRequest updateBrandRequest) {
         this.brandBusinessRules.checkIfBrandIdNotExists(updateBrandRequest.getId());
+        this.brandBusinessRules.checkIfBrandNameExists(updateBrandRequest.getName());
 
         Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 

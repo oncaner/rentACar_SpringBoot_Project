@@ -62,6 +62,7 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public Model update(UpdateModelRequest updateModelRequest) {
         this.modelBusinessRules.checkIfModelIdNotExists(updateModelRequest.getId());
+        this.modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
 
         Model oldModel = this.modelRepository.findById(updateModelRequest.getId()).orElseThrow();
         Brand brand = this.brandRepository.findById(oldModel.getBrand().getId()).orElseThrow();

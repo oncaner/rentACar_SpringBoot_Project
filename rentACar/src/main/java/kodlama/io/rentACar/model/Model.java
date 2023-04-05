@@ -1,6 +1,5 @@
 package kodlama.io.rentACar.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +27,6 @@ public class Model {
     private String name;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "brand_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Brand brand;

@@ -1,6 +1,6 @@
 package kodlama.io.rentACar.businessrules;
 
-import kodlama.io.rentACar.exception.BusinessException;
+import kodlama.io.rentACar.exception.ModelNameExistsException;
 import kodlama.io.rentACar.exception.ModelNotFoundException;
 import kodlama.io.rentACar.repository.ModelRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ public class ModelBusinessRules {
 
     public void checkIfModelNameExists(String name) {
         if (this.modelRepository.existsByName(name)) {
-            throw new BusinessException("Model name already exists");
+            throw new ModelNameExistsException(String.format("Model name already exists with: %s", name));
         }
     }
 
