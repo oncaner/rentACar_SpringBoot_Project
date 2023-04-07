@@ -45,6 +45,20 @@ public class CarController {
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
+    @GetMapping("/order-by-price-asc")
+    public ResponseEntity<List<GetAllCarsResponse>> getAllByOrderByDailyPriceAsc() {
+        List<GetAllCarsResponse> responseList = this.carService.getAllByOrderByDailyPriceAsc();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/order-by-price-desc")
+    public ResponseEntity<List<GetAllCarsResponse>> getAllByOrderByDailyPriceDesc() {
+        List<GetAllCarsResponse> responseList = this.carService.getAllByOrderByDailyPriceDesc();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<GetByIdCarResponse> getById(@PathVariable int id) {
         GetByIdCarResponse response = this.carService.getById(id);

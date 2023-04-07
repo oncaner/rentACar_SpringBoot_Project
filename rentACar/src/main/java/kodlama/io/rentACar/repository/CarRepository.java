@@ -12,6 +12,10 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     List<Car> findAllByModelId(int id);
 
+    List<Car> findAllByOrderByDailyPriceAsc();
+
+    List<Car> findAllByOrderByDailyPriceDesc();
+
     @Query("SELECT c FROM Car c "
             + "JOIN c.model m "
             + "JOIN m.brand b "

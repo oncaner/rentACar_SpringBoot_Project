@@ -18,6 +18,10 @@ import java.util.List;
 public interface CarService {
     List<GetAllCarsResponse> getAll();
 
+    List<GetAllCarsResponse> getAllByOrderByDailyPriceAsc();
+
+    List<GetAllCarsResponse> getAllByOrderByDailyPriceDesc();
+
     List<GetAllCarsByModelIdResponse> getAllByModelId(int id);
 
     List<GetAllCarsByBrandIdResponse> getAllByBrandId(int id);

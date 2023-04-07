@@ -43,6 +43,28 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
+    public List<GetAllCarsResponse> getAllByOrderByDailyPriceAsc() {
+        List<Car> cars = this.carRepository.findAllByOrderByDailyPriceAsc();
+
+        List<GetAllCarsResponse> carsResponses = cars.stream()
+                .map(car -> this.modelMapperService.forResponse()
+                        .map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
+
+        return carsResponses;
+    }
+
+    @Override
+    public List<GetAllCarsResponse> getAllByOrderByDailyPriceDesc() {
+        List<Car> cars = this.carRepository.findAllByOrderByDailyPriceDesc();
+
+        List<GetAllCarsResponse> carsResponses = cars.stream()
+                .map(car -> this.modelMapperService.forResponse()
+                        .map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
+
+        return carsResponses;
+    }
+
+    @Override
     public List<GetAllCarsByModelIdResponse> getAllByModelId(int id) {
         this.modelBusinessRules.checkIfModelIdNotExists(id);
 
