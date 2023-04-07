@@ -21,6 +21,8 @@ public class GetAllCarsResponse {
 
     private String brandName;
 
+    private int brandId;
+
     private String modelName;
 
     private int modelId;

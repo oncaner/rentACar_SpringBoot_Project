@@ -37,6 +37,20 @@ public class BrandController {
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
+    @GetMapping("/order-by-name-desc")
+    public ResponseEntity<List<GetAllBrandsResponse>> getAllByOrderByNameDesc() {
+        List<GetAllBrandsResponse> responseList = this.brandService.getAllByOrderByNameDesc();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/order-by-name-asc")
+    public ResponseEntity<List<GetAllBrandsResponse>> getAllByOrderByNameAsc() {
+        List<GetAllBrandsResponse> responseList = this.brandService.getAllByOrderByNameAsc();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<GetByIdBrandResponse> getById(@PathVariable int id) {
         GetByIdBrandResponse response = this.brandService.getById(id);

@@ -11,6 +11,10 @@ import java.util.List;
 public interface ModelService {
     List<GetAllModelsResponse> getAll();
 
+    List<GetAllModelsResponse> getAllByOrderByNameAsc();
+
+    List<GetAllModelsResponse> getAllByOrderByNameDesc();
+
     GetByIdModelResponse getById(int id);
 
     Model create(CreateModelRequest createModelRequest);

@@ -39,6 +39,20 @@ public class ModelController {
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
+    @GetMapping("/order-by-name-asc")
+    public ResponseEntity<List<GetAllModelsResponse>> getAllByOrderByNameAsc() {
+        List<GetAllModelsResponse> responseList = this.modelService.getAllByOrderByNameAsc();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/order-by-name-desc")
+    public ResponseEntity<List<GetAllModelsResponse>> getAllByOrderByNameDesc() {
+        List<GetAllModelsResponse> responseList = this.modelService.getAllByOrderByNameDesc();
+
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<GetByIdModelResponse> getById(@PathVariable int id) {
         GetByIdModelResponse response = this.modelService.getById(id);

@@ -41,6 +41,28 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    public List<GetAllModelsResponse> getAllByOrderByNameAsc() {
+        List<Model> models = this.modelRepository.findAllByOrderByNameAsc();
+
+        List<GetAllModelsResponse> modelsResponse = models.stream()
+                .map(model -> this.modelMapperService.forResponse()
+                        .map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
+
+        return modelsResponse;
+    }
+
+    @Override
+    public List<GetAllModelsResponse> getAllByOrderByNameDesc() {
+        List<Model> models = this.modelRepository.findAllByOrderByNameDesc();
+
+        List<GetAllModelsResponse> modelsResponse = models.stream()
+                .map(model -> this.modelMapperService.forResponse()
+                        .map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
+
+        return modelsResponse;
+    }
+
+    @Override
     public GetByIdModelResponse getById(int id) {
         Model model = this.modelRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(String.format("Model not found with: %d", id)));
 

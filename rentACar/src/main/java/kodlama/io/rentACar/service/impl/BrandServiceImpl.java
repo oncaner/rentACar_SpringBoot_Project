@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
     private final ModelMapperService modelMapperService;
-    private BrandBusinessRules brandBusinessRules;
+    private final BrandBusinessRules brandBusinessRules;
 
     @Override
     public List<GetAllBrandsResponse> getAll() {
@@ -32,6 +32,28 @@ public class BrandServiceImpl implements BrandService {
                         .map(brand, GetAllBrandsResponse.class)).collect(Collectors.toList());
 
         return brandsResponse;
+    }
+
+    @Override
+    public List<GetAllBrandsResponse> getAllByOrderByNameDesc() {
+        List<Brand> brands = this.brandRepository.findAllByOrderByNameDesc();
+
+        List<GetAllBrandsResponse> brandsResponses = brands.stream()
+                .map(brand -> this.modelMapperService.forResponse()
+                        .map(brand, GetAllBrandsResponse.class)).toList();
+
+        return brandsResponses;
+    }
+
+    @Override
+    public List<GetAllBrandsResponse> getAllByOrderByNameAsc() {
+        List<Brand> brands = this.brandRepository.findAllByOrderByNameAsc();
+
+        List<GetAllBrandsResponse> brandsResponses = brands.stream()
+                .map(brand -> this.modelMapperService.forResponse()
+                        .map(brand, GetAllBrandsResponse.class)).toList();
+
+        return brandsResponses;
     }
 
     @Override

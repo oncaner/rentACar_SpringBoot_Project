@@ -11,6 +11,10 @@ import java.util.List;
 public interface BrandService {
     List<GetAllBrandsResponse> getAll();
 
+    List<GetAllBrandsResponse> getAllByOrderByNameDesc();
+
+    List<GetAllBrandsResponse> getAllByOrderByNameAsc();
+
     GetByIdBrandResponse getById(int id);
 
     Brand create(CreateBrandRequest createBrandRequest);
