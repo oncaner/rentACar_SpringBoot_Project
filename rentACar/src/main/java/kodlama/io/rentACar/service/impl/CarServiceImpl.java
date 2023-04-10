@@ -79,6 +79,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<GetAllCarsByBrandIdResponse> getAllByBrandId(int id) {
         this.brandBusinessRules.checkIfBrandIdNotExists(id);
+        this.brandBusinessRules.checkIfCarsNotExistWithBrandId(id);
 
         List<Car> cars = this.carRepository.findAllByBrandId(id);
 
