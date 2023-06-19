@@ -1,20 +1,15 @@
 package kodlama.io.rentACar.model;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -44,4 +39,7 @@ public class Car {
     @JoinColumn(name = "model_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Model model;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    private List<Rental> rentals;
 }
