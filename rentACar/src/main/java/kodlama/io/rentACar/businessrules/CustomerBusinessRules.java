@@ -11,7 +11,7 @@ public class CustomerBusinessRules {
 
     private CustomerRepository customerRepository;
 
-    public void checkIfCustomerIdNotExists(Long id) {
+    public void checkIfCustomerIdNotExists(int id) {
         if (!this.customerRepository.existsById(id)) {
             throw new CustomerNotFoundException(String.format("Customer not found with: %d", id));
         }

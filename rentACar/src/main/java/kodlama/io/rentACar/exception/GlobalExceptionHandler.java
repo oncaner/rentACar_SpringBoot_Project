@@ -80,6 +80,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleCarCannotBeRentedException(CarCannotBeRentedException carCannotBeRentedException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(carCannotBeRentedException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ProblemDetails handleInvalidRentDateException(InvalidRentDateException invalidRentDateException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(invalidRentDateException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ProblemDetails handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException) {
         ProblemDetails problemDetails = new ProblemDetails();
         problemDetails.setMessage("No data matching the entered value was found!");

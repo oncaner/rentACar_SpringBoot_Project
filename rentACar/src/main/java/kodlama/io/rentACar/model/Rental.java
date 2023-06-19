@@ -19,7 +19,7 @@ public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "car_id")

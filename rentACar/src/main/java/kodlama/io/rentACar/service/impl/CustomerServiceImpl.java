@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto getById(Long id) {
+    public CustomerDto getById(int id) {
         Customer customer = this.customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(String.format("Customer not found with %d", id)));
         CustomerDto customerDto = this.modelMapperService.forResponse().map(customer, CustomerDto.class);
 
@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(int id) {
         this.customerBusinessRules.checkIfCustomerIdNotExists(id);
 
         this.customerRepository.deleteById(id);

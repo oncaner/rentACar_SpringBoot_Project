@@ -29,7 +29,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDto> getById(@PathVariable Long id) {
+    public ResponseEntity<CustomerDto> getById(@PathVariable int id) {
         CustomerDto customerDto = this.customerService.getById(id);
 
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
@@ -43,7 +43,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable int id) {
         this.customerService.delete(id);
     }
 }
