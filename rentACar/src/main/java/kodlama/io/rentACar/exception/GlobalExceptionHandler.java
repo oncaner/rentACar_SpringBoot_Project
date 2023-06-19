@@ -70,6 +70,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ProblemDetails handleCustomerNotFoundException(CustomerNotFoundException customerNotFoundException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(customerNotFoundException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ProblemDetails handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException) {
         ProblemDetails problemDetails = new ProblemDetails();
