@@ -31,5 +31,5 @@ public class Brand {
     private String name;
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
-    List<Model> models;
+    private List<Model> models;
 }

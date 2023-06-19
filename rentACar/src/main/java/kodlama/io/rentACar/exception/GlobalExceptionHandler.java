@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 @RestControllerAdvice // For Exceptions
-public class ExceptionsHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
