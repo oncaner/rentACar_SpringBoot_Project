@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ModelDto {
 
-    private int id;
+    private Long id;
 
     private String name;
 

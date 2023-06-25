@@ -25,5 +25,5 @@ public class CreateCarRequest {
     private int state;
 
     @NotNull
-    private int modelId;
+    private Long modelId;
 }

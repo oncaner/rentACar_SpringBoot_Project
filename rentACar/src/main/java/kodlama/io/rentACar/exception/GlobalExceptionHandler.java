@@ -61,6 +61,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ProblemDetails handleRentalNotFoundException(RentalNotFoundException rentalNotFoundException) {
+        ProblemDetails problemDetails = new ProblemDetails();
+        problemDetails.setMessage(rentalNotFoundException.getMessage());
+
+        return problemDetails;
+    }
+
+    @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ProblemDetails handleModelNameExistsException(ModelNameExistsException modelNameExistsException) {
         ProblemDetails problemDetails = new ProblemDetails();

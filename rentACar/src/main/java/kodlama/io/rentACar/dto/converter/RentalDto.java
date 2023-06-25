@@ -11,21 +11,29 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class RentalDto {
 
-    private int id;
+    private Long id;
 
-    private int customerId;
+    private Long customerId;
 
     private String firstName;
 
     private String lastName;
 
-    private int carId;
+    private Long carId;
 
     private String plate;
 
     private double dailyPrice;
 
     private int modelYear;
+
+    private Long modelId;
+
+    private String modelName;
+
+    private Long brandId;
+
+    private String brandName;
 
     private LocalDate startDate;
 

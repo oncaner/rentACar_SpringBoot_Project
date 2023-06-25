@@ -25,7 +25,7 @@ public class Brand {
     @Column(name = "id")
     @Id // Primary Key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto Increment
-    private int id;
+    private Long id;
 
     @Column(name = "name")
     private String name;

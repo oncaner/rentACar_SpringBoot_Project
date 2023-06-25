@@ -60,21 +60,21 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetByIdCarResponse> getById(@PathVariable int id) {
+    public ResponseEntity<GetByIdCarResponse> getById(@PathVariable Long id) {
         GetByIdCarResponse response = this.carService.getById(id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/get-all-by-model-id/{id}")
-    public ResponseEntity<List<GetAllCarsByModelIdResponse>> getAllByModelId(@PathVariable int id) {
+    public ResponseEntity<List<GetAllCarsByModelIdResponse>> getAllByModelId(@PathVariable Long id) {
         List<GetAllCarsByModelIdResponse> responseList = this.carService.getAllByModelId(id);
 
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
     @GetMapping("/get-all-by-brand-id/{id}")
-    public ResponseEntity<List<GetAllCarsByBrandIdResponse>> getAllByBrandId(@PathVariable int id) {
+    public ResponseEntity<List<GetAllCarsByBrandIdResponse>> getAllByBrandId(@PathVariable Long id) {
         List<GetAllCarsByBrandIdResponse> responseList = this.carService.getAllByBrandId(id);
 
         return new ResponseEntity<>(responseList, HttpStatus.OK);
@@ -123,7 +123,7 @@ public class CarController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Long id) {
         this.carService.delete(id);
     }
 }

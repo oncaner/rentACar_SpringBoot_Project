@@ -15,13 +15,13 @@ public interface BrandService {
 
     List<GetAllBrandsResponse> getAllByOrderByNameAsc();
 
-    GetByIdBrandResponse getById(int id);
+    GetByIdBrandResponse getById(Long id);
 
     Brand create(CreateBrandRequest createBrandRequest);
 
     Brand update(UpdateBrandRequest updateBrandRequest);
 
-    void delete(int id);
+    void delete(Long id);
 
 
 }

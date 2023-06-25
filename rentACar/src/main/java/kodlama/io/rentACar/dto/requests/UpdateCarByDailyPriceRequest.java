@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCarByDailyPriceRequest {
     @NotNull
-    private int id;
+    private Long id;
 
     @NotNull
     private double dailyPrice;

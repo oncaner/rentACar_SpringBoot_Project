@@ -19,7 +19,7 @@ public class ModelBusinessRules {
         }
     }
 
-    public void checkIfModelIdNotExists(int id) {
+    public void checkIfModelIdNotExists(Long id) {
         if (!this.modelRepository.existsById(id)) {
             throw new ModelNotFoundException(String.format("Model not found with: %d", id));
         }

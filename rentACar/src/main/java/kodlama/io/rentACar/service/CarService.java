@@ -22,11 +22,11 @@ public interface CarService {
 
     List<GetAllCarsResponse> getAllByOrderByDailyPriceDesc();
 
-    List<GetAllCarsByModelIdResponse> getAllByModelId(int id);
+    List<GetAllCarsByModelIdResponse> getAllByModelId(Long id);
 
-    List<GetAllCarsByBrandIdResponse> getAllByBrandId(int id);
+    List<GetAllCarsByBrandIdResponse> getAllByBrandId(Long id);
 
-    GetByIdCarResponse getById(int id);
+    GetByIdCarResponse getById(Long id);
 
     Car create(CreateCarRequest createCarRequest);
 
@@ -40,5 +40,5 @@ public interface CarService {
 
     Car updateByState(UpdateCarByStateRequest updateCarByStateRequest);
 
-    void delete(int id);
+    void delete(Long id);
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCarByPlateRequest {
 
     @NotNull
-    private int id;
+    private Long id;
 
     @NotNull
     @NotBlank

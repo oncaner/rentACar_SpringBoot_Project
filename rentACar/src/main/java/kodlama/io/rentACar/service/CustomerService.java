@@ -10,10 +10,10 @@ public interface CustomerService {
 
     List<CustomerDto> getAll();
 
-    CustomerDto getById(int id);
+    CustomerDto getById(Long id);
 
     Customer create(CreateCustomerRequest createCustomerRequest);
 
-    void delete(int id);
+    void delete(Long id);
 
 }

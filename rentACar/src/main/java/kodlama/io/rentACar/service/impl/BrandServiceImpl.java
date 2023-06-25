@@ -27,41 +27,34 @@ public class BrandServiceImpl implements BrandService {
     public List<GetAllBrandsResponse> getAll() {
         List<Brand> brands = brandRepository.findAll();
 
-        List<GetAllBrandsResponse> brandsResponse = brands.stream()
+        return brands.stream()
                 .map(brand -> this.modelMapperService.forResponse()
                         .map(brand, GetAllBrandsResponse.class)).collect(Collectors.toList());
-
-        return brandsResponse;
     }
 
     @Override
     public List<GetAllBrandsResponse> getAllByOrderByNameDesc() {
         List<Brand> brands = this.brandRepository.findAllByOrderByNameDesc();
 
-        List<GetAllBrandsResponse> brandsResponses = brands.stream()
+        return brands.stream()
                 .map(brand -> this.modelMapperService.forResponse()
                         .map(brand, GetAllBrandsResponse.class)).toList();
-
-        return brandsResponses;
     }
 
     @Override
     public List<GetAllBrandsResponse> getAllByOrderByNameAsc() {
         List<Brand> brands = this.brandRepository.findAllByOrderByNameAsc();
 
-        List<GetAllBrandsResponse> brandsResponses = brands.stream()
+        return brands.stream()
                 .map(brand -> this.modelMapperService.forResponse()
                         .map(brand, GetAllBrandsResponse.class)).toList();
-
-        return brandsResponses;
     }
 
     @Override
-    public GetByIdBrandResponse getById(int id) {
+    public GetByIdBrandResponse getById(Long id) {
         Brand brand = this.brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException(String.format("Brand not found with: %d", id)));
-        GetByIdBrandResponse response = this.modelMapperService.forResponse().map(brand, GetByIdBrandResponse.class);
 
-        return response;
+        return this.modelMapperService.forResponse().map(brand, GetByIdBrandResponse.class);
     }
 
     @Override
@@ -84,7 +77,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Long id) {
         this.brandBusinessRules.checkIfBrandIdNotExists(id);
 
         this.brandRepository.deleteById(id);

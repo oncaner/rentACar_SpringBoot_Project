@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetAllCarsResponse {
 
-    private int id;
+    private Long id;
 
     private String plate;
 
@@ -21,9 +21,9 @@ public class GetAllCarsResponse {
 
     private String brandName;
 
-    private int brandId;
+    private Long brandId;
 
     private String modelName;
 
-    private int modelId;
+    private Long modelId;
 }

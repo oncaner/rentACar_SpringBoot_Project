@@ -54,7 +54,7 @@ public class ModelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetByIdModelResponse> getById(@PathVariable int id) {
+    public ResponseEntity<GetByIdModelResponse> getById(@PathVariable Long id) {
         GetByIdModelResponse response = this.modelService.getById(id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -76,7 +76,7 @@ public class ModelController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Long id) {
         this.modelService.delete(id);
     }
 

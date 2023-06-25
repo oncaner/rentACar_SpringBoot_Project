@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarDto {
 
-    private int id;
+    private Long id;
 
     private String plate;
 

@@ -52,7 +52,7 @@ public class BrandController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetByIdBrandResponse> getById(@PathVariable int id) {
+    public ResponseEntity<GetByIdBrandResponse> getById(@PathVariable Long id) {
         GetByIdBrandResponse response = this.brandService.getById(id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -73,7 +73,7 @@ public class BrandController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Long id) {
         this.brandService.delete(id);
     }
 

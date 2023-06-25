@@ -5,6 +5,7 @@ import kodlama.io.rentACar.dto.converter.RentalDto;
 import kodlama.io.rentACar.dto.converter.RentalDtoConverter;
 import kodlama.io.rentACar.dto.requests.CreateRentalRequest;
 import kodlama.io.rentACar.model.Rental;
+import kodlama.io.rentACar.repository.RentalRepository;
 import kodlama.io.rentACar.service.RentalService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,8 +38,10 @@ public class RentalController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable int id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         this.rentalService.delete(id);
+
+        return new ResponseEntity<>("Successfully deleted.",HttpStatus.OK);
     }
 
 }

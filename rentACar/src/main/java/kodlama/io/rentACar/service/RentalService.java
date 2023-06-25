@@ -12,6 +12,6 @@ public interface RentalService {
 
     Rental create(CreateRentalRequest createRentalRequest);
 
-    void delete(int id);
+    void delete(Long id);
 
 }

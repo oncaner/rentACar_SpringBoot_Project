@@ -35,69 +35,58 @@ public class CarServiceImpl implements CarService {
     public List<GetAllCarsResponse> getAll() {
         List<Car> cars = this.carRepository.findAll();
 
-        List<GetAllCarsResponse> carsResponses = cars.stream()
+        return cars.stream()
                 .map(car -> this.modelMapperService.forResponse()
                         .map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
-
-        return carsResponses;
     }
 
     @Override
     public List<GetAllCarsResponse> getAllByOrderByDailyPriceAsc() {
         List<Car> cars = this.carRepository.findAllByOrderByDailyPriceAsc();
 
-        List<GetAllCarsResponse> carsResponses = cars.stream()
+        return cars.stream()
                 .map(car -> this.modelMapperService.forResponse()
                         .map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
-
-        return carsResponses;
     }
 
     @Override
     public List<GetAllCarsResponse> getAllByOrderByDailyPriceDesc() {
         List<Car> cars = this.carRepository.findAllByOrderByDailyPriceDesc();
 
-        List<GetAllCarsResponse> carsResponses = cars.stream()
+        return cars.stream()
                 .map(car -> this.modelMapperService.forResponse()
                         .map(car, GetAllCarsResponse.class)).collect(Collectors.toList());
-
-        return carsResponses;
     }
 
     @Override
-    public List<GetAllCarsByModelIdResponse> getAllByModelId(int id) {
+    public List<GetAllCarsByModelIdResponse> getAllByModelId(Long id) {
         this.modelBusinessRules.checkIfModelIdNotExists(id);
 
         List<Car> cars = this.carRepository.findAllByModelId(id);
 
-        List<GetAllCarsByModelIdResponse> carsResponse = cars.stream()
+        return cars.stream()
                 .map(car -> this.modelMapperService.forResponse().map(car, GetAllCarsByModelIdResponse.class)).toList();
-
-        return carsResponse;
     }
 
     @Override
-    public List<GetAllCarsByBrandIdResponse> getAllByBrandId(int id) {
+    public List<GetAllCarsByBrandIdResponse> getAllByBrandId(Long id) {
         this.brandBusinessRules.checkIfBrandIdNotExists(id);
         this.brandBusinessRules.checkIfCarsNotExistWithBrandId(id);
 
         List<Car> cars = this.carRepository.findAllByBrandId(id);
 
-        List<GetAllCarsByBrandIdResponse> carsResponse = cars.stream()
+        return cars.stream()
                 .map(car -> this.modelMapperService.forResponse()
                         .map(car, GetAllCarsByBrandIdResponse.class)).toList();
-
-        return carsResponse;
     }
 
     @Override
-    public GetByIdCarResponse getById(int id) {
+    public GetByIdCarResponse getById(Long id) {
         this.carBusinessRules.checkIfCarIdNotExists(id);
 
         Car car = this.carRepository.findById(id).orElseThrow();
-        GetByIdCarResponse carResponse = this.modelMapperService.forResponse().map(car, GetByIdCarResponse.class);
 
-        return carResponse;
+        return this.modelMapperService.forResponse().map(car, GetByIdCarResponse.class);
     }
 
     @Override
@@ -166,7 +155,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Long id) {
         this.carBusinessRules.checkIfCarIdNotExists(id);
 
         this.carRepository.deleteById(id);

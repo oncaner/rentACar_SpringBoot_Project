@@ -7,10 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CarRepository extends JpaRepository<Car, Integer> {
+public interface CarRepository extends JpaRepository<Car, Long> {
     boolean existsByPlate(String name);
 
-    List<Car> findAllByModelId(int id);
+    List<Car> findAllByModelId(Long id);
 
     List<Car> findAllByOrderByDailyPriceAsc();
 
@@ -20,6 +20,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
             + "JOIN c.model m "
             + "JOIN m.brand b "
             + "WHERE b.id = :brandId")
-    List<Car> findAllByBrandId(@Param("brandId") int id);
+    List<Car> findAllByBrandId(@Param("brandId") Long id);
 
 }

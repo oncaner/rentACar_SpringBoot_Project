@@ -15,13 +15,13 @@ public interface ModelService {
 
     List<GetAllModelsResponse> getAllByOrderByNameDesc();
 
-    GetByIdModelResponse getById(int id);
+    GetByIdModelResponse getById(Long id);
 
     Model create(CreateModelRequest createModelRequest);
 
     Model update(UpdateModelRequest updateModelRequest);
 
-    void delete(int id);
+    void delete(Long id);
 
 
 }

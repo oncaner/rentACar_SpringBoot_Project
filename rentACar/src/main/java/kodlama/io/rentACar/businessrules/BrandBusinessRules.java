@@ -21,13 +21,13 @@ public class BrandBusinessRules {
         }
     }
 
-    public void checkIfBrandIdNotExists(int id) {
+    public void checkIfBrandIdNotExists(Long id) {
         if (!this.brandRepository.existsById(id)) {
             throw new BrandNotFoundException(String.format("Brand not found with: %d", id));
         }
     }
 
-    public void checkIfCarsNotExistWithBrandId(int id) {
+    public void checkIfCarsNotExistWithBrandId(Long id) {
         if (this.carRepository.findAllByBrandId(id).isEmpty()) {
             throw new CarNotFoundException(String.format("Cars not found with: %d", id));
         }

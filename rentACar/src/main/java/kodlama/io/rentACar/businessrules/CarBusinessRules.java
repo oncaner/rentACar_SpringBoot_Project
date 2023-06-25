@@ -18,7 +18,7 @@ public class CarBusinessRules {
         }
     }
 
-    public void checkIfCarIdNotExists(int id) {
+    public void checkIfCarIdNotExists(Long id) {
         if (!carRepository.existsById(id)) {
             throw new CarNotFoundException(String.format("Car not found with: %d", id));
         }

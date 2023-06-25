@@ -33,42 +33,34 @@ public class ModelServiceImpl implements ModelService {
     public List<GetAllModelsResponse> getAll() {
         List<Model> models = this.modelRepository.findAll();
 
-        List<GetAllModelsResponse> modelsResponse = models.stream()
+        return models.stream()
                 .map(model -> this.modelMapperService.forResponse()
                         .map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
-
-        return modelsResponse;
     }
 
     @Override
     public List<GetAllModelsResponse> getAllByOrderByNameAsc() {
         List<Model> models = this.modelRepository.findAllByOrderByNameAsc();
 
-        List<GetAllModelsResponse> modelsResponse = models.stream()
+        return models.stream()
                 .map(model -> this.modelMapperService.forResponse()
                         .map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
-
-        return modelsResponse;
     }
 
     @Override
     public List<GetAllModelsResponse> getAllByOrderByNameDesc() {
         List<Model> models = this.modelRepository.findAllByOrderByNameDesc();
 
-        List<GetAllModelsResponse> modelsResponse = models.stream()
+        return models.stream()
                 .map(model -> this.modelMapperService.forResponse()
                         .map(model, GetAllModelsResponse.class)).collect(Collectors.toList());
-
-        return modelsResponse;
     }
 
     @Override
-    public GetByIdModelResponse getById(int id) {
+    public GetByIdModelResponse getById(Long id) {
         Model model = this.modelRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(String.format("Model not found with: %d", id)));
 
-        GetByIdModelResponse modelResponse = this.modelMapperService.forResponse().map(model, GetByIdModelResponse.class);
-
-        return modelResponse;
+        return this.modelMapperService.forResponse().map(model, GetByIdModelResponse.class);
     }
 
     @Override
@@ -96,7 +88,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Long id) {
         this.modelBusinessRules.checkIfModelIdNotExists(id);
 
         this.modelRepository.deleteById(id);

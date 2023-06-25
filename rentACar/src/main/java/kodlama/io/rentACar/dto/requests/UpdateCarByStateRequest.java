@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class UpdateCarByStateRequest {
 
     @NotNull
-    private int id;
+    private Long id;
 
     @NotNull
     private int state;

@@ -24,19 +24,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDto> getAll() {
         List<Customer> customers = this.customerRepository.findAll();
-        List<CustomerDto> customerDtos = customers.stream()
+
+        return customers.stream()
                 .map(customer -> this.modelMapperService.forResponse()
                         .map(customer, CustomerDto.class)).toList();
-
-        return customerDtos;
     }
 
     @Override
-    public CustomerDto getById(int id) {
+    public CustomerDto getById(Long id) {
         Customer customer = this.customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(String.format("Customer not found with %d", id)));
-        CustomerDto customerDto = this.modelMapperService.forResponse().map(customer, CustomerDto.class);
 
-        return customerDto;
+        return this.modelMapperService.forResponse().map(customer, CustomerDto.class);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(Long id) {
         this.customerBusinessRules.checkIfCustomerIdNotExists(id);
 
         this.customerRepository.deleteById(id);
