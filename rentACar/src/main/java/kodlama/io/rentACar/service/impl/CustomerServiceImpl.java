@@ -1,9 +1,10 @@
 package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.CustomerBusinessRules;
-import kodlama.io.rentACar.config.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.converter.CustomerDto;
-import kodlama.io.rentACar.dto.requests.CreateCustomerRequest;
+import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
+import kodlama.io.rentACar.dto.CustomerDto;
+import kodlama.io.rentACar.dto.CustomerDtoConverter;
+import kodlama.io.rentACar.dto.request.CreateCustomerRequest;
 import kodlama.io.rentACar.exception.CustomerNotFoundException;
 import kodlama.io.rentACar.model.Customer;
 import kodlama.io.rentACar.repository.CustomerRepository;
@@ -20,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ModelMapperService modelMapperService;
     private final CustomerBusinessRules customerBusinessRules;
+    private final CustomerDtoConverter customerDtoConverter;
 
     @Override
     public List<CustomerDto> getAll() {
@@ -38,10 +40,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer create(CreateCustomerRequest createCustomerRequest) {
+    public CustomerDto create(CreateCustomerRequest createCustomerRequest) {
         Customer customer = this.modelMapperService.forRequest().map(createCustomerRequest, Customer.class);
 
-        return this.customerRepository.save(customer);
+        return this.customerDtoConverter.convertToDto(this.customerRepository.save(customer));
     }
 
     @Override

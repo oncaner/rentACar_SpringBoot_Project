@@ -1,26 +1,21 @@
 package kodlama.io.rentACar.controller;
 
 import jakarta.validation.Valid;
-import kodlama.io.rentACar.dto.converter.ModelDto;
-import kodlama.io.rentACar.dto.converter.ModelDtoConverter;
+import kodlama.io.rentACar.dto.ModelDto;
+import kodlama.io.rentACar.dto.request.CreateModelRequest;
+import kodlama.io.rentACar.dto.request.UpdateModelRequest;
 import kodlama.io.rentACar.service.ModelService;
-import kodlama.io.rentACar.dto.requests.CreateModelRequest;
-import kodlama.io.rentACar.dto.requests.UpdateModelRequest;
-import kodlama.io.rentACar.dto.responses.GetAllModelsResponse;
-import kodlama.io.rentACar.dto.responses.GetByIdModelResponse;
-import kodlama.io.rentACar.model.Model;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
@@ -30,54 +25,48 @@ import java.util.List;
 public class ModelController {
 
     private final ModelService modelService;
-    private final ModelDtoConverter modelDtoConverter;
 
     @GetMapping()
-    public ResponseEntity<List<GetAllModelsResponse>> getAll() {
-        List<GetAllModelsResponse> responseList = this.modelService.getAll();
+    public ResponseEntity<List<ModelDto>> getAll() {
 
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        return new ResponseEntity<>(this.modelService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/order-by-name-asc")
-    public ResponseEntity<List<GetAllModelsResponse>> getAllByOrderByNameAsc() {
-        List<GetAllModelsResponse> responseList = this.modelService.getAllByOrderByNameAsc();
+    public ResponseEntity<List<ModelDto>> getAllByOrderByNameAsc() {
 
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        return new ResponseEntity<>(this.modelService.getAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
     @GetMapping("/order-by-name-desc")
-    public ResponseEntity<List<GetAllModelsResponse>> getAllByOrderByNameDesc() {
-        List<GetAllModelsResponse> responseList = this.modelService.getAllByOrderByNameDesc();
+    public ResponseEntity<List<ModelDto>> getAllByOrderByNameDesc() {
 
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+        return new ResponseEntity<>(this.modelService.getAllByOrderByNameDesc(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetByIdModelResponse> getById(@PathVariable Long id) {
-        GetByIdModelResponse response = this.modelService.getById(id);
+    public ResponseEntity<ModelDto> getById(@PathVariable Long id) {
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(this.modelService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<ModelDto> create(@RequestBody @Valid CreateModelRequest createModelRequest) {
-        Model model = this.modelService.create(createModelRequest);
 
-        return new ResponseEntity<>(modelDtoConverter.convertToDto(model), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.modelService.create(createModelRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<ModelDto> update(@RequestBody @Valid UpdateModelRequest updateModelRequest) {
-        Model model = this.modelService.update(updateModelRequest);
 
-        return new ResponseEntity<>(modelDtoConverter.convertToDto(model), HttpStatus.OK);
+        return new ResponseEntity<>(this.modelService.update(updateModelRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         this.modelService.delete(id);
+
+        return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
     }
 
 }

@@ -1,16 +1,19 @@
 package kodlama.io.rentACar.controller;
 
 import jakarta.validation.Valid;
-import kodlama.io.rentACar.dto.converter.RentalDto;
-import kodlama.io.rentACar.dto.converter.RentalDtoConverter;
-import kodlama.io.rentACar.dto.requests.CreateRentalRequest;
-import kodlama.io.rentACar.model.Rental;
-import kodlama.io.rentACar.repository.RentalRepository;
+import kodlama.io.rentACar.dto.RentalDto;
+import kodlama.io.rentACar.dto.request.CreateRentalRequest;
 import kodlama.io.rentACar.service.RentalService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -20,7 +23,6 @@ import java.util.List;
 public class RentalController {
 
     private final RentalService rentalService;
-    private final RentalDtoConverter rentalDtoConverter;
 
     @GetMapping()
     public ResponseEntity<List<RentalDto>> getAll() {
@@ -32,16 +34,14 @@ public class RentalController {
     @PostMapping("/create")
     public ResponseEntity<RentalDto> create(@RequestBody @Valid CreateRentalRequest createRentalRequest) {
 
-        Rental rental = this.rentalService.create(createRentalRequest);
-
-        return new ResponseEntity<>(this.rentalDtoConverter.convertToDto(rental), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.rentalService.create(createRentalRequest), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         this.rentalService.delete(id);
 
-        return new ResponseEntity<>("Successfully deleted.",HttpStatus.OK);
+        return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
     }
 
 }

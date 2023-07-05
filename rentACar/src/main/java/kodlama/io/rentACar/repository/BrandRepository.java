@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BrandRepository extends JpaRepository<Brand, Long> { // Long --> Primary key is a Long.
+public interface BrandRepository extends JpaRepository<Brand, Long> {
     boolean existsByName(String name);
 
     List<Brand> findAllByOrderByNameDesc();

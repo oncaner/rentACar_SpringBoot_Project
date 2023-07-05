@@ -1,11 +1,11 @@
 package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.BrandBusinessRules;
-import kodlama.io.rentACar.config.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.requests.CreateBrandRequest;
-import kodlama.io.rentACar.dto.requests.UpdateBrandRequest;
-import kodlama.io.rentACar.dto.responses.GetAllBrandsResponse;
-import kodlama.io.rentACar.dto.responses.GetByIdBrandResponse;
+import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
+import kodlama.io.rentACar.dto.BrandDto;
+import kodlama.io.rentACar.dto.BrandDtoConverter;
+import kodlama.io.rentACar.dto.request.CreateBrandRequest;
+import kodlama.io.rentACar.dto.request.UpdateBrandRequest;
 import kodlama.io.rentACar.exception.BrandNotFoundException;
 import kodlama.io.rentACar.model.Brand;
 import kodlama.io.rentACar.repository.BrandRepository;
@@ -14,66 +14,63 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Service // It is a Service layer.
+@Service
 @AllArgsConstructor
 public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
     private final ModelMapperService modelMapperService;
     private final BrandBusinessRules brandBusinessRules;
+    private final BrandDtoConverter brandDtoConverter;
 
     @Override
-    public List<GetAllBrandsResponse> getAll() {
-        List<Brand> brands = brandRepository.findAll();
+    public List<BrandDto> getAll() {
+        List<Brand> brands = this.brandRepository.findAll();
 
         return brands.stream()
-                .map(brand -> this.modelMapperService.forResponse()
-                        .map(brand, GetAllBrandsResponse.class)).collect(Collectors.toList());
+                .map(this.brandDtoConverter::convertToDto).toList();
     }
 
     @Override
-    public List<GetAllBrandsResponse> getAllByOrderByNameDesc() {
+    public List<BrandDto> getAllByOrderByNameDesc() {
         List<Brand> brands = this.brandRepository.findAllByOrderByNameDesc();
 
         return brands.stream()
-                .map(brand -> this.modelMapperService.forResponse()
-                        .map(brand, GetAllBrandsResponse.class)).toList();
+                .map(this.brandDtoConverter::convertToDto).toList();
     }
 
     @Override
-    public List<GetAllBrandsResponse> getAllByOrderByNameAsc() {
+    public List<BrandDto> getAllByOrderByNameAsc() {
         List<Brand> brands = this.brandRepository.findAllByOrderByNameAsc();
 
         return brands.stream()
-                .map(brand -> this.modelMapperService.forResponse()
-                        .map(brand, GetAllBrandsResponse.class)).toList();
+                .map(this.brandDtoConverter::convertToDto).toList();
     }
 
     @Override
-    public GetByIdBrandResponse getById(Long id) {
+    public BrandDto getById(Long id) {
         Brand brand = this.brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException(String.format("Brand not found with: %d", id)));
 
-        return this.modelMapperService.forResponse().map(brand, GetByIdBrandResponse.class);
+        return this.brandDtoConverter.convertToDto(brand);
     }
 
     @Override
-    public Brand create(CreateBrandRequest createBrandRequest) {
+    public BrandDto create(CreateBrandRequest createBrandRequest) {
         this.brandBusinessRules.checkIfBrandNameExists(createBrandRequest.getName());
 
         Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 
-        return this.brandRepository.save(brand);
+        return this.brandDtoConverter.convertToDto(this.brandRepository.save(brand));
     }
 
     @Override
-    public Brand update(UpdateBrandRequest updateBrandRequest) {
+    public BrandDto update(UpdateBrandRequest updateBrandRequest) {
         this.brandBusinessRules.checkIfBrandIdNotExists(updateBrandRequest.getId());
         this.brandBusinessRules.checkIfBrandNameExists(updateBrandRequest.getName());
 
         Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
 
-        return this.brandRepository.save(brand);
+        return this.brandDtoConverter.convertToDto(this.brandRepository.save(brand));
     }
 
     @Override

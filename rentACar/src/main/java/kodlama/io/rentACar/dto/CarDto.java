@@ -1,0 +1,26 @@
+package kodlama.io.rentACar.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CarDto {
+
+    private Long id;
+
+    private String plate;
+
+    private double dailyPrice;
+
+    private int modelYear;
+
+    private int state;
+
+    private String modelName;
+
+    private String brandName;
+
+}

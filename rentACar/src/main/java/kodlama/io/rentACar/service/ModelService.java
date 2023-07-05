@@ -1,25 +1,23 @@
 package kodlama.io.rentACar.service;
 
-import kodlama.io.rentACar.dto.requests.CreateModelRequest;
-import kodlama.io.rentACar.dto.requests.UpdateModelRequest;
-import kodlama.io.rentACar.dto.responses.GetAllModelsResponse;
-import kodlama.io.rentACar.dto.responses.GetByIdModelResponse;
-import kodlama.io.rentACar.model.Model;
+import kodlama.io.rentACar.dto.ModelDto;
+import kodlama.io.rentACar.dto.request.CreateModelRequest;
+import kodlama.io.rentACar.dto.request.UpdateModelRequest;
 
 import java.util.List;
 
 public interface ModelService {
-    List<GetAllModelsResponse> getAll();
+    List<ModelDto> getAll();
 
-    List<GetAllModelsResponse> getAllByOrderByNameAsc();
+    List<ModelDto> getAllByOrderByNameAsc();
 
-    List<GetAllModelsResponse> getAllByOrderByNameDesc();
+    List<ModelDto> getAllByOrderByNameDesc();
 
-    GetByIdModelResponse getById(Long id);
+    ModelDto getById(Long id);
 
-    Model create(CreateModelRequest createModelRequest);
+    ModelDto create(CreateModelRequest createModelRequest);
 
-    Model update(UpdateModelRequest updateModelRequest);
+    ModelDto update(UpdateModelRequest updateModelRequest);
 
     void delete(Long id);
 

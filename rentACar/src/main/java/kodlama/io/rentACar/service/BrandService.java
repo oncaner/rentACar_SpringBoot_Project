@@ -1,25 +1,23 @@
 package kodlama.io.rentACar.service;
 
-import kodlama.io.rentACar.dto.requests.CreateBrandRequest;
-import kodlama.io.rentACar.dto.requests.UpdateBrandRequest;
-import kodlama.io.rentACar.dto.responses.GetAllBrandsResponse;
-import kodlama.io.rentACar.dto.responses.GetByIdBrandResponse;
-import kodlama.io.rentACar.model.Brand;
+import kodlama.io.rentACar.dto.BrandDto;
+import kodlama.io.rentACar.dto.request.CreateBrandRequest;
+import kodlama.io.rentACar.dto.request.UpdateBrandRequest;
 
 import java.util.List;
 
 public interface BrandService {
-    List<GetAllBrandsResponse> getAll();
+    List<BrandDto> getAll();
 
-    List<GetAllBrandsResponse> getAllByOrderByNameDesc();
+    List<BrandDto> getAllByOrderByNameDesc();
 
-    List<GetAllBrandsResponse> getAllByOrderByNameAsc();
+    List<BrandDto> getAllByOrderByNameAsc();
 
-    GetByIdBrandResponse getById(Long id);
+    BrandDto getById(Long id);
 
-    Brand create(CreateBrandRequest createBrandRequest);
+    BrandDto create(CreateBrandRequest createBrandRequest);
 
-    Brand update(UpdateBrandRequest updateBrandRequest);
+    BrandDto update(UpdateBrandRequest updateBrandRequest);
 
     void delete(Long id);
 
