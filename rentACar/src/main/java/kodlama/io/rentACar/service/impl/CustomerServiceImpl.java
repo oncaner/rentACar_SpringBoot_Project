@@ -28,15 +28,14 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> customers = this.customerRepository.findAll();
 
         return customers.stream()
-                .map(customer -> this.modelMapperService.forResponse()
-                        .map(customer, CustomerDto.class)).toList();
+                .map(this.customerDtoConverter::convertToDto).toList();
     }
 
     @Override
     public CustomerDto getById(Long id) {
         Customer customer = this.customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(String.format("Customer not found with %d", id)));
 
-        return this.modelMapperService.forResponse().map(customer, CustomerDto.class);
+        return this.customerDtoConverter.convertToDto(customer);
     }
 
     @Override
