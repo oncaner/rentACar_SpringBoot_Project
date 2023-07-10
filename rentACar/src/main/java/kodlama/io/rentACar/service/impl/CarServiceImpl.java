@@ -7,6 +7,7 @@ import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
 import kodlama.io.rentACar.dto.CarDto;
 import kodlama.io.rentACar.dto.CarDtoConverter;
 import kodlama.io.rentACar.dto.request.*;
+import kodlama.io.rentACar.exception.CarNotFoundException;
 import kodlama.io.rentACar.model.Car;
 import kodlama.io.rentACar.model.Model;
 import kodlama.io.rentACar.repository.CarRepository;
@@ -76,6 +77,13 @@ public class CarServiceImpl implements CarService {
         Car car = this.carRepository.findById(id).orElseThrow();
 
         return this.carDtoConverter.convertToDto(car);
+    }
+
+    @Override
+    public Car getByIdForOtherService(Long id) {
+
+        return this.carRepository.findById(id).orElseThrow(
+                () -> new CarNotFoundException("Car not found with: " + id));
     }
 
     @Override

@@ -39,6 +39,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer getByIdForOtherService(Long id) {
+
+        return this.customerRepository.findById(id).orElseThrow(
+                () -> new CustomerNotFoundException("Customer not found with: " + id)
+        );
+    }
+
+    @Override
     public CustomerDto create(CreateCustomerRequest createCustomerRequest) {
         Customer customer = this.modelMapperService.forRequest().map(createCustomerRequest, Customer.class);
 

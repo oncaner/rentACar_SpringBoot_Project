@@ -3,6 +3,7 @@ package kodlama.io.rentACar.service;
 
 import kodlama.io.rentACar.dto.CarDto;
 import kodlama.io.rentACar.dto.request.*;
+import kodlama.io.rentACar.model.Car;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public interface CarService {
     List<CarDto> getAllByBrandId(Long id);
 
     CarDto getById(Long id);
+
+    Car getByIdForOtherService(Long id);
 
     CarDto create(CreateCarRequest createCarRequest);
 

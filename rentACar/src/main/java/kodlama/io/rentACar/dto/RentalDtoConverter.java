@@ -12,13 +12,10 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class RentalDtoConverter {
 
-    private final CustomerRepository customerRepository;
-    private final CarRepository carRepository;
-
     public RentalDto convertToDto(Rental rental) {
 
-        Customer customer = customerRepository.findById(rental.getCustomer().getId()).orElseThrow();
-        Car car = carRepository.findById(rental.getCar().getId()).orElseThrow();
+        Customer customer = rental.getCustomer();
+        Car car = rental.getCar();
 
         return new RentalDto(
                 rental.getId(),

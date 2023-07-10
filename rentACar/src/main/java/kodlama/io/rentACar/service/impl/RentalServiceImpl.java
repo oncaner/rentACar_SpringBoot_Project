@@ -1,7 +1,6 @@
 package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.CustomerBusinessRules;
-import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
 import kodlama.io.rentACar.dto.RentalDto;
 import kodlama.io.rentACar.dto.RentalDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateRentalRequest;
@@ -9,9 +8,11 @@ import kodlama.io.rentACar.exception.CarCannotBeRentedException;
 import kodlama.io.rentACar.exception.InvalidRentDateException;
 import kodlama.io.rentACar.exception.RentalNotFoundException;
 import kodlama.io.rentACar.model.Car;
+import kodlama.io.rentACar.model.Customer;
 import kodlama.io.rentACar.model.Rental;
 import kodlama.io.rentACar.repository.RentalRepository;
 import kodlama.io.rentACar.service.CarService;
+import kodlama.io.rentACar.service.CustomerService;
 import kodlama.io.rentACar.service.RentalService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class RentalServiceImpl implements RentalService {
 
     private final RentalRepository rentalRepository;
     private final CarService carService;
-    private final ModelMapperService modelMapperService;
+    private final CustomerService customerService;
     private final CustomerBusinessRules customerBusinessRules;
     private final RentalDtoConverter rentalDtoConverter;
 
@@ -33,8 +34,7 @@ public class RentalServiceImpl implements RentalService {
         List<Rental> rentals = this.rentalRepository.findAll();
 
         return rentals.stream()
-                .map(rental -> this.modelMapperService.forResponse()
-                        .map(rental, RentalDto.class)).toList();
+                .map(rentalDtoConverter::convertToDto).toList();
     }
 
     @Override
@@ -45,14 +45,18 @@ public class RentalServiceImpl implements RentalService {
             throw new InvalidRentDateException("Geçersiz kiralama tarihleri. Başlangıç tarihi, bitiş tarihinden önce olmalıdır.");
         }
 
-        Car car = this.modelMapperService.forResponse()
-                .map(this.carService.getById(createRentalRequest.getCarId()), Car.class);
+        Car car = this.carService.getByIdForOtherService(createRentalRequest.getCarId());
+        Customer customer = this.customerService.getByIdForOtherService(createRentalRequest.getCustomerId());
 
         if (car.getState() != 1) {
             throw new CarCannotBeRentedException("Araç kiralanamaz durumda.");
         }
 
-        Rental rental = this.modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+        Rental rental = new Rental();
+        rental.setCar(car);
+        rental.setCustomer(customer);
+        rental.setStartDate(createRentalRequest.getStartDate());
+        rental.setEndDate(createRentalRequest.getEndDate());
 
         return this.rentalDtoConverter.convertToDto(this.rentalRepository.save(rental));
     }
