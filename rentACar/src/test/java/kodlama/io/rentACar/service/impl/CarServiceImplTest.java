@@ -291,6 +291,36 @@ class CarServiceImplTest {
     }
 
     @Test
+    public void testGetByIdForOtherService_whenCarIdExists_shouldReturnCar() {
+
+        Long id = 1L;
+
+        Brand brand = new Brand(1L, "brand", List.of());
+        Model model = new Model(1L, "model", brand, List.of());
+        Car car = new Car(1L, "plate", 1, 1, 1, model, List.of());
+
+        when(carRepository.findById(id)).thenReturn(Optional.of(car));
+
+        Car result = carService.getByIdForOtherService(id);
+
+        assertEquals(result, car);
+
+        verify(carRepository).findById(id);
+    }
+
+    @Test
+    public void testGetByIdForOtherService_whenCarIdDoesNotExist_shouldThrowCarNotFoundException() {
+
+        Long id = 1L;
+
+        when(carRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(CarNotFoundException.class, () -> carService.getByIdForOtherService(id));
+
+        verify(carRepository).findById(id);
+    }
+
+    @Test
     public void testCreate_whenCreateCarCalledWithRequest_shouldReturnCarDto() {
 
         CreateCarRequest request = new CreateCarRequest("plate", 1, 1, 1, 1L);

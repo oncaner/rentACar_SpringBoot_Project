@@ -106,6 +106,35 @@ class CustomerServiceImplTest {
     }
 
     @Test
+    public void testGetByIdForOtherService_whenCustomerIdExists_shouldReturnCustomer() {
+
+        Long id = 1L;
+
+        Customer customer = new Customer(1L, "firstname", "lastname", List.of());
+
+        when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
+
+        Customer result = customerService.getByIdForOtherService(id);
+
+        assertEquals(result, customer);
+
+        verify(customerRepository).findById(id);
+    }
+
+    @Test
+    public void testGetByIdForOtherService_whenCustomerIdDoesNotExist_shouldThrowCustomerNotFoundException() {
+
+        Long id = 1L;
+
+        when(customerRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(CustomerNotFoundException.class, () ->
+                customerService.getByIdForOtherService(id));
+
+        verify(customerRepository).findById(id);
+    }
+
+    @Test
     public void testCreate_whenCreateCustomerCalledWithRequest_shouldReturnCustomerDto() {
 
         CreateCustomerRequest request = new CreateCustomerRequest("firstname", "lastname");
