@@ -1,7 +1,7 @@
 package kodlama.io.rentACar.controller;
 
 import jakarta.validation.Valid;
-import kodlama.io.rentACar.dto.ModelDto;
+import kodlama.io.rentACar.dto.response.ModelDto;
 import kodlama.io.rentACar.dto.request.CreateModelRequest;
 import kodlama.io.rentACar.dto.request.UpdateModelRequest;
 import kodlama.io.rentACar.service.ModelService;

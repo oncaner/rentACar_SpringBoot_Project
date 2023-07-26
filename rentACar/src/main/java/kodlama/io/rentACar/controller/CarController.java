@@ -1,7 +1,7 @@
 package kodlama.io.rentACar.controller;
 
 import jakarta.validation.Valid;
-import kodlama.io.rentACar.dto.CarDto;
+import kodlama.io.rentACar.dto.response.CarDto;
 import kodlama.io.rentACar.dto.request.CreateCarRequest;
 import kodlama.io.rentACar.dto.request.UpdateCarByDailyPriceRequest;
 import kodlama.io.rentACar.dto.request.UpdateCarByPlateRequest;

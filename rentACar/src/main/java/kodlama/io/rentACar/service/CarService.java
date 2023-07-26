@@ -1,7 +1,7 @@
 package kodlama.io.rentACar.service;
 
 
-import kodlama.io.rentACar.dto.CarDto;
+import kodlama.io.rentACar.dto.response.CarDto;
 import kodlama.io.rentACar.dto.request.*;
 import kodlama.io.rentACar.model.Car;
 

@@ -4,14 +4,14 @@ import kodlama.io.rentACar.businessrules.BrandBusinessRules;
 import kodlama.io.rentACar.businessrules.CarBusinessRules;
 import kodlama.io.rentACar.businessrules.ModelBusinessRules;
 import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.CarDto;
-import kodlama.io.rentACar.dto.CarDtoConverter;
+import kodlama.io.rentACar.dto.converter.CarDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateCarRequest;
-import kodlama.io.rentACar.dto.request.UpdateCarRequest;
-import kodlama.io.rentACar.dto.request.UpdateCarByStateRequest;
-import kodlama.io.rentACar.dto.request.UpdateCarByPlateRequest;
-import kodlama.io.rentACar.dto.request.UpdateCarByModelYearRequest;
 import kodlama.io.rentACar.dto.request.UpdateCarByDailyPriceRequest;
+import kodlama.io.rentACar.dto.request.UpdateCarByModelYearRequest;
+import kodlama.io.rentACar.dto.request.UpdateCarByPlateRequest;
+import kodlama.io.rentACar.dto.request.UpdateCarByStateRequest;
+import kodlama.io.rentACar.dto.request.UpdateCarRequest;
+import kodlama.io.rentACar.dto.response.CarDto;
 import kodlama.io.rentACar.exception.BrandNotFoundException;
 import kodlama.io.rentACar.exception.CarNotFoundException;
 import kodlama.io.rentACar.exception.CarPlateExistsException;
@@ -20,11 +20,13 @@ import kodlama.io.rentACar.model.Brand;
 import kodlama.io.rentACar.model.Car;
 import kodlama.io.rentACar.model.Model;
 import kodlama.io.rentACar.repository.CarRepository;
-import kodlama.io.rentACar.service.CarService;
 import kodlama.io.rentACar.service.ModelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -33,67 +35,55 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 class CarServiceImplTest {
 
-    private CarService carService;
+    @InjectMocks
+    private CarServiceImpl carService;
+    @Mock
     private CarRepository carRepository;
+    @Mock
     private ModelService modelService;
+    @Mock
     private ModelMapperService modelMapperService;
+    @Mock
     private ModelMapper modelMapper;
+    @Mock
     private CarBusinessRules carBusinessRules;
+    @Mock
     private ModelBusinessRules modelBusinessRules;
+    @Mock
     private BrandBusinessRules brandBusinessRules;
+    @Mock
     private CarDtoConverter carDtoConverter;
 
     @BeforeEach
     void setUp() {
-
-        carRepository = mock(CarRepository.class);
-        modelService = mock(ModelService.class);
-        modelMapperService = mock(ModelMapperService.class);
-        modelMapper = mock(ModelMapper.class);
-        carBusinessRules = mock(CarBusinessRules.class);
-        modelBusinessRules = mock(ModelBusinessRules.class);
-        brandBusinessRules = mock(BrandBusinessRules.class);
-        carDtoConverter = mock(CarDtoConverter.class);
-
-        carService = new CarServiceImpl(carRepository, modelService, modelMapperService, carBusinessRules, modelBusinessRules, brandBusinessRules, carDtoConverter);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testGetAll_whenGetAllCarsCalled_shouldReturnListOfCarDto() {
 
-        Car car1 = new Car(1L, "plate1", 1, 1, 1, new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        Car car2 = new Car(2L, "plate2", 2, 2, 2, new Model(2L, "model2", new Brand(2L, "brand2", List.of()), List.of()), List.of());
-
-        CarDto carDto1 = new CarDto(1L, "plate1", 1, 1, 1, "model1", "brand1");
-
-        CarDto carDto2 = new CarDto(2L, "plate2", 2, 2, 2, "model2", "brand2");
-
+        Car car1 = Car.builder().build();
         List<Car> cars = new ArrayList<>();
         cars.add(car1);
-        cars.add(car2);
 
+        CarDto carDto1 = CarDto.builder().build();
         List<CarDto> carDtos = new ArrayList<>();
         carDtos.add(carDto1);
-        carDtos.add(carDto2);
 
         when(carRepository.findAll()).thenReturn(cars);
         when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
-        when(carDtoConverter.convertToDto(car2)).thenReturn(carDto2);
 
         List<CarDto> result = carService.getAll();
 
         verify(carRepository).findAll();
         verify(carDtoConverter).convertToDto(car1);
-        verify(carDtoConverter).convertToDto(car2);
 
         assertEquals(result, carDtos);
     }
@@ -101,31 +91,24 @@ class CarServiceImplTest {
     @Test
     public void testGetAllByOrderByDailyPriceAsc_whenGetAllCarsCalled_shouldReturnListOfCarDto() {
 
-        Car car1 = new Car(1L, "plate1", 1, 1, 1, new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        Car car2 = new Car(2L, "plate2", 2, 2, 2, new Model(2L, "model2", new Brand(2L, "brand2", List.of()), List.of()), List.of());
-
-        CarDto carDto1 = new CarDto(1L, "plate1", 1, 1, 1, "model1", "brand1");
-
-        CarDto carDto2 = new CarDto(2L, "plate2", 2, 2, 2, "model2", "brand2");
-
+        Car car1 = Car.builder().build();
         List<Car> cars = new ArrayList<>();
         cars.add(car1);
-        cars.add(car2);
 
+        CarDto carDto1 = CarDto.builder().build();
         List<CarDto> carDtos = new ArrayList<>();
         carDtos.add(carDto1);
-        carDtos.add(carDto2);
+
+        when(carRepository.findAll()).thenReturn(cars);
+        when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
 
         when(carRepository.findAllByOrderByDailyPriceAsc()).thenReturn(cars);
         when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
-        when(carDtoConverter.convertToDto(car2)).thenReturn(carDto2);
 
         List<CarDto> result = carService.getAllByOrderByDailyPriceAsc();
 
         verify(carRepository).findAllByOrderByDailyPriceAsc();
         verify(carDtoConverter).convertToDto(car1);
-        verify(carDtoConverter).convertToDto(car2);
 
         assertEquals(result, carDtos);
     }
@@ -133,31 +116,24 @@ class CarServiceImplTest {
     @Test
     public void testGetAllByOrderByDailyPriceDesc_whenGetAllCarsCalled_shouldReturnListOfCarDto() {
 
-        Car car1 = new Car(1L, "plate1", 1, 1, 1, new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        Car car2 = new Car(2L, "plate2", 2, 2, 2, new Model(2L, "model2", new Brand(2L, "brand2", List.of()), List.of()), List.of());
-
-        CarDto carDto1 = new CarDto(1L, "plate1", 1, 1, 1, "model1", "brand1");
-
-        CarDto carDto2 = new CarDto(2L, "plate2", 2, 2, 2, "model2", "brand2");
-
+        Car car1 = Car.builder().build();
         List<Car> cars = new ArrayList<>();
         cars.add(car1);
-        cars.add(car2);
 
+        CarDto carDto1 = CarDto.builder().build();
         List<CarDto> carDtos = new ArrayList<>();
         carDtos.add(carDto1);
-        carDtos.add(carDto2);
+
+        when(carRepository.findAll()).thenReturn(cars);
+        when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
 
         when(carRepository.findAllByOrderByDailyPriceDesc()).thenReturn(cars);
         when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
-        when(carDtoConverter.convertToDto(car2)).thenReturn(carDto2);
 
         List<CarDto> result = carService.getAllByOrderByDailyPriceDesc();
 
         verify(carRepository).findAllByOrderByDailyPriceDesc();
         verify(carDtoConverter).convertToDto(car1);
-        verify(carDtoConverter).convertToDto(car2);
 
         assertEquals(result, carDtos);
     }
@@ -167,31 +143,24 @@ class CarServiceImplTest {
 
         Long id = 1L;
 
-        Car car1 = new Car(1L, "plate1", 1, 1, 1, new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        Car car2 = new Car(2L, "plate2", 2, 2, 2, new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        CarDto carDto1 = new CarDto(1L, "plate1", 1, 1, 1, "model1", "brand1");
-
-        CarDto carDto2 = new CarDto(2L, "plate2", 2, 2, 2, "model1", "brand1");
-
+        Car car1 = Car.builder().build();
         List<Car> cars = new ArrayList<>();
         cars.add(car1);
-        cars.add(car2);
 
+        CarDto carDto1 = CarDto.builder().build();
         List<CarDto> carDtos = new ArrayList<>();
         carDtos.add(carDto1);
-        carDtos.add(carDto2);
+
+        when(carRepository.findAll()).thenReturn(cars);
+        when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
 
         when(carRepository.findAllByModelId(id)).thenReturn(cars);
         when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
-        when(carDtoConverter.convertToDto(car2)).thenReturn(carDto2);
 
         List<CarDto> result = carService.getAllByModelId(id);
 
         verify(carRepository).findAllByModelId(id);
         verify(carDtoConverter).convertToDto(car1);
-        verify(carDtoConverter).convertToDto(car2);
 
         assertEquals(result, carDtos);
     }
@@ -214,31 +183,24 @@ class CarServiceImplTest {
 
         Long id = 1L;
 
-        Car car1 = new Car(1L, "plate1", 1, 1, 1, new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        Car car2 = new Car(2L, "plate2", 2, 2, 2, new Model(2L, "model2", new Brand(1L, "brand1", List.of()), List.of()), List.of());
-
-        CarDto carDto1 = new CarDto(1L, "plate1", 1, 1, 1, "model1", "brand1");
-
-        CarDto carDto2 = new CarDto(2L, "plate2", 2, 2, 2, "model2", "brand1");
-
+        Car car1 = Car.builder().build();
         List<Car> cars = new ArrayList<>();
         cars.add(car1);
-        cars.add(car2);
 
+        CarDto carDto1 = CarDto.builder().build();
         List<CarDto> carDtos = new ArrayList<>();
         carDtos.add(carDto1);
-        carDtos.add(carDto2);
+
+        when(carRepository.findAll()).thenReturn(cars);
+        when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
 
         when(carRepository.findAllByBrandId(id)).thenReturn(cars);
         when(carDtoConverter.convertToDto(car1)).thenReturn(carDto1);
-        when(carDtoConverter.convertToDto(car2)).thenReturn(carDto2);
 
         List<CarDto> result = carService.getAllByBrandId(id);
 
         verify(carRepository).findAllByBrandId(id);
         verify(carDtoConverter).convertToDto(car1);
-        verify(carDtoConverter).convertToDto(car2);
 
         assertEquals(result, carDtos);
     }
@@ -261,9 +223,9 @@ class CarServiceImplTest {
 
         Long id = 1L;
 
-        Car car = new Car(1L, "plate", 1, 1, 1, new Model(1L, "model", new Brand(1L, "brand", List.of()), List.of()), List.of());
+        Car car = Car.builder().build();
 
-        CarDto carDto = new CarDto(1L, "plate", 1, 1, 1, "model", "brand");
+        CarDto carDto = CarDto.builder().build();
 
         when(carRepository.findById(id)).thenReturn(Optional.of(car));
         when(carDtoConverter.convertToDto(car)).thenReturn(carDto);
@@ -295,9 +257,7 @@ class CarServiceImplTest {
 
         Long id = 1L;
 
-        Brand brand = new Brand(1L, "brand", List.of());
-        Model model = new Model(1L, "model", brand, List.of());
-        Car car = new Car(1L, "plate", 1, 1, 1, model, List.of());
+        Car car = Car.builder().id(id).build();
 
         when(carRepository.findById(id)).thenReturn(Optional.of(car));
 
@@ -323,13 +283,16 @@ class CarServiceImplTest {
     @Test
     public void testCreate_whenCreateCarCalledWithRequest_shouldReturnCarDto() {
 
-        CreateCarRequest request = new CreateCarRequest("plate", 1, 1, 1, 1L);
+        CreateCarRequest request = CreateCarRequest.builder()
+                .plate("123").dailyPrice(123).modelYear(123).state(1).modelId(1L).build();
 
-        Model model = new Model(1L, "model", new Brand(1L, "brand", List.of()), List.of());
+        Car car = Car.builder()
+                .id(1L).plate(request.getPlate()).dailyPrice(request.getDailyPrice())
+                .modelYear(request.getModelYear()).state(request.getState())
+                .model(Model.builder().name("model")
+                        .brand(Brand.builder().name("brand").build()).build()).build();
 
-        Car car = new Car(1L, request.getPlate(), request.getDailyPrice(), request.getModelYear(), request.getState(), model, List.of());
-
-        CarDto carDto = new CarDto(1L, "plate", 1, 1, 1, model.getName(), model.getBrand().getName());
+        CarDto carDto = CarDto.builder().id(car.getId()).plate(car.getPlate()).dailyPrice(car.getDailyPrice()).modelYear(car.getModelYear()).state(car.getState()).modelName(car.getModel().getName()).brandName(car.getModel().getBrand().getName()).build();
 
         when(modelMapperService.forRequest()).thenReturn(modelMapper);
         when(modelMapper.map(request, Car.class)).thenReturn(car);
@@ -349,9 +312,10 @@ class CarServiceImplTest {
     @Test
     public void testCreate_whenPlateExists_shouldThrowCarPlateExistsException() {
 
-        CreateCarRequest request = new CreateCarRequest("plate", 1, 1, 1, 1L);
+        CreateCarRequest request = CreateCarRequest.builder().plate("123").build();
 
-        doThrow(CarPlateExistsException.class).when(carBusinessRules).checkIfPlateExists(request.getPlate());
+        doThrow(CarPlateExistsException.class).when(carBusinessRules)
+                .checkIfPlateExists(request.getPlate());
 
         assertThrows(CarPlateExistsException.class, () -> carService.create(request));
 
@@ -362,9 +326,10 @@ class CarServiceImplTest {
     @Test
     public void testCreate_whenModelIdDoesNotExist_shouldThrowModelNotFoundException() {
 
-        CreateCarRequest request = new CreateCarRequest("plate", 1, 1, 1, 1L);
+        CreateCarRequest request = CreateCarRequest.builder().modelId(1L).build();
 
-        doThrow(ModelNotFoundException.class).when(modelBusinessRules).checkIfModelIdNotExists(request.getModelId());
+        doThrow(ModelNotFoundException.class).when(modelBusinessRules)
+                .checkIfModelIdNotExists(request.getModelId());
 
         assertThrows(ModelNotFoundException.class, () -> carService.create(request));
 
@@ -375,20 +340,28 @@ class CarServiceImplTest {
     @Test
     public void testUpdate_whenCarCalledWithRequest_shouldReturnCarDto() {
 
-        UpdateCarRequest request = new UpdateCarRequest(1L, "newPlate", 2, 2, 2);
+        UpdateCarRequest request = UpdateCarRequest.builder()
+                .id(1L).plate("123").dailyPrice(123).modelYear(123).state(1).build();
 
-        Brand brand = new Brand(1L, "brand", List.of());
-        Model model = new Model(1L, "model", brand, List.of());
+        Car oldCar = Car.builder()
+                .id(request.getId()).plate("123").dailyPrice(123).modelYear(123).state(1)
+                .model(Model.builder().name("model")
+                        .brand(Brand.builder().name("brand").build()).build()).build();
 
-        Car oldCar = new Car(1L, "plate", 1, 1, 1, model, List.of());
+        Car updatedCar = Car.builder()
+                .id(request.getId()).plate(request.getPlate()).dailyPrice(request.getDailyPrice())
+                .modelYear(request.getModelYear()).state(request.getState())
+                .model(oldCar.getModel()).build();
 
-        Car updatedCar = new Car(request.getId(), request.getPlate(), request.getDailyPrice(), request.getModelYear(), request.getState(), oldCar.getModel(), List.of());
-
-        CarDto carDto = new CarDto(updatedCar.getId(), updatedCar.getPlate(), updatedCar.getDailyPrice(), updatedCar.getModelYear(), updatedCar.getState(), updatedCar.getModel().getName(), updatedCar.getModel().getBrand().getName());
+        CarDto carDto = CarDto.builder()
+                .id(updatedCar.getId()).plate(updatedCar.getPlate()).dailyPrice(updatedCar.getDailyPrice())
+                .modelYear(updatedCar.getModelYear()).state(updatedCar.getState())
+                .modelName(updatedCar.getModel().getName())
+                .brandName(updatedCar.getModel().getBrand().getName()).build();
 
         when(carRepository.findById(request.getId())).thenReturn(Optional.of(oldCar));
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
-        when(modelMapper.map(modelService.getById(oldCar.getModel().getId()), Model.class)).thenReturn(model);
+        when(modelMapper.map(modelService.getById(oldCar.getModel().getId()), Model.class)).thenReturn(oldCar.getModel());
         when(modelMapperService.forRequest()).thenReturn(modelMapper);
         when(modelMapper.map(request, Car.class)).thenReturn(updatedCar);
         when(carRepository.save(updatedCar)).thenReturn(updatedCar);
@@ -410,7 +383,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdate_whenCarIdDoesNotExist_shouldThrowCarNotFoundException() {
 
-        UpdateCarRequest request = new UpdateCarRequest(1L, "plate", 1, 1, 1);
+        UpdateCarRequest request = UpdateCarRequest.builder().id(1L).build();
 
         doThrow(CarNotFoundException.class).when(carBusinessRules).checkIfCarIdNotExists(request.getId());
 
@@ -423,7 +396,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdate_whenCarPlateExists_shouldThrowCarPlateExistsException() {
 
-        UpdateCarRequest request = new UpdateCarRequest(1L, "plate", 1, 1, 1);
+        UpdateCarRequest request = UpdateCarRequest.builder().plate("123").build();
 
         doThrow(CarPlateExistsException.class).when(carBusinessRules).checkIfPlateExists(request.getPlate());
 
@@ -436,15 +409,11 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByPlate_whenUpdateByPlateCalledWithRequest_shouldReturnCarDto() {
 
-        UpdateCarByPlateRequest request = new UpdateCarByPlateRequest(1L, "XYZ123");
+        UpdateCarByPlateRequest request = UpdateCarByPlateRequest.builder().id(1L).plate("123").build();
 
-        Car car = new Car();
-        car.setId(request.getId());
-        car.setPlate(request.getPlate());
+        Car car = Car.builder().id(request.getId()).plate(request.getPlate()).build();
 
-        CarDto carDto = new CarDto();
-        carDto.setId(car.getId());
-        carDto.setPlate(car.getPlate());
+        CarDto carDto = CarDto.builder().id(car.getId()).plate(car.getPlate()).build();
 
         when(carRepository.findById(request.getId())).thenReturn(Optional.of(car));
         when(carRepository.save(car)).thenReturn(car);
@@ -464,7 +433,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByPlate_whenCarIdDoesNotExist_shouldThrowCarNotFoundException() {
 
-        UpdateCarByPlateRequest request = new UpdateCarByPlateRequest(1L, "plate");
+        UpdateCarByPlateRequest request = UpdateCarByPlateRequest.builder().id(1L).build();
 
         doThrow(CarNotFoundException.class).when(carBusinessRules).checkIfCarIdNotExists(request.getId());
 
@@ -478,7 +447,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByPlate_whenPlateExists_shouldThrowCarPlateExistsException() {
 
-        UpdateCarByPlateRequest request = new UpdateCarByPlateRequest(1L, "plate");
+        UpdateCarByPlateRequest request = UpdateCarByPlateRequest.builder().plate("123").build();
 
         doThrow(CarPlateExistsException.class).when(carBusinessRules).checkIfPlateExists(request.getPlate());
 
@@ -492,15 +461,12 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByDailyPrice_whenUpdateByDailyPriceCalledWithRequest_shouldReturnCarDto() {
 
-        UpdateCarByDailyPriceRequest request = new UpdateCarByDailyPriceRequest(1L, 1);
+        UpdateCarByDailyPriceRequest request = UpdateCarByDailyPriceRequest.builder()
+                .id(1L).dailyPrice(123).build();
 
-        Car car = new Car();
-        car.setId(request.getId());
-        car.setDailyPrice(request.getDailyPrice());
+        Car car = Car.builder().id(request.getId()).dailyPrice(request.getDailyPrice()).build();
 
-        CarDto carDto = new CarDto();
-        carDto.setId(car.getId());
-        carDto.setDailyPrice(car.getDailyPrice());
+        CarDto carDto = CarDto.builder().id(car.getId()).dailyPrice(car.getDailyPrice()).build();
 
         when(carRepository.findById(request.getId())).thenReturn(Optional.of(car));
         when(carRepository.save(car)).thenReturn(car);
@@ -518,7 +484,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByDailyPrice_whenCarIdDoesNotExist_shouldThrowCarNotFoundException() {
 
-        UpdateCarByDailyPriceRequest request = new UpdateCarByDailyPriceRequest(1L, 1);
+        UpdateCarByDailyPriceRequest request = UpdateCarByDailyPriceRequest.builder().id(1L).build();
 
         doThrow(CarNotFoundException.class).when(carBusinessRules).checkIfCarIdNotExists(request.getId());
 
@@ -532,15 +498,12 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByModelYear_whenUpdateByModelYearCalledWithRequest_shouldReturnCarDto() {
 
-        UpdateCarByModelYearRequest request = new UpdateCarByModelYearRequest(1L, 1);
+        UpdateCarByModelYearRequest request = UpdateCarByModelYearRequest.builder()
+                .id(1L).modelYear(123).build();
 
-        Car car = new Car();
-        car.setId(request.getId());
-        car.setModelYear(request.getModelYear());
+        Car car = Car.builder().id(request.getId()).modelYear(request.getModelYear()).build();
 
-        CarDto carDto = new CarDto();
-        carDto.setId(car.getId());
-        carDto.setModelYear(car.getModelYear());
+        CarDto carDto = CarDto.builder().id(car.getId()).modelYear(car.getModelYear()).build();
 
         when(carRepository.findById(request.getId())).thenReturn(Optional.of(car));
         when(carRepository.save(car)).thenReturn(car);
@@ -558,7 +521,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByModelYear_whenCarIdDoesNotExist_shouldThrowCarNotFoundException() {
 
-        UpdateCarByModelYearRequest request = new UpdateCarByModelYearRequest(1L, 1);
+        UpdateCarByModelYearRequest request = UpdateCarByModelYearRequest.builder().id(1L).build();
 
         doThrow(CarNotFoundException.class).when(carBusinessRules).checkIfCarIdNotExists(request.getId());
 
@@ -572,15 +535,11 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByState_whenUpdateByStateCalledWithRequest_shouldReturnCarDto() {
 
-        UpdateCarByStateRequest request = new UpdateCarByStateRequest(1L, 1);
+        UpdateCarByStateRequest request = UpdateCarByStateRequest.builder().id(1L).state(123).build();
 
-        Car car = new Car();
-        car.setId(request.getId());
-        car.setState(request.getState());
+        Car car = Car.builder().id(request.getId()).state(request.getState()).build();
 
-        CarDto carDto = new CarDto();
-        carDto.setId(car.getId());
-        carDto.setState(car.getState());
+        CarDto carDto = CarDto.builder().id(car.getId()).state(car.getState()).build();
 
         when(carRepository.findById(request.getId())).thenReturn(Optional.of(car));
         when(carRepository.save(car)).thenReturn(car);
@@ -598,7 +557,7 @@ class CarServiceImplTest {
     @Test
     public void testUpdateByState_whenCarIdDoesNotExist_shouldThrowCarNotFoundException() {
 
-        UpdateCarByStateRequest request = new UpdateCarByStateRequest(1L, 1);
+        UpdateCarByStateRequest request = UpdateCarByStateRequest.builder().id(1L).build();
 
         doThrow(CarNotFoundException.class).when(carBusinessRules).checkIfCarIdNotExists(request.getId());
 
@@ -632,11 +591,4 @@ class CarServiceImplTest {
         verify(carBusinessRules).checkIfCarIdNotExists(id);
         verifyNoInteractions(carRepository);
     }
-
 }
-
-
-
-
-
-

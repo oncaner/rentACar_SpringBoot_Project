@@ -1,8 +1,8 @@
 package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.CustomerBusinessRules;
-import kodlama.io.rentACar.dto.RentalDto;
-import kodlama.io.rentACar.dto.RentalDtoConverter;
+import kodlama.io.rentACar.dto.response.RentalDto;
+import kodlama.io.rentACar.dto.converter.RentalDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateRentalRequest;
 import kodlama.io.rentACar.exception.CarCannotBeRentedException;
 import kodlama.io.rentACar.exception.InvalidRentDateException;
@@ -42,11 +42,13 @@ public class RentalServiceImpl implements RentalService {
         this.customerBusinessRules.checkIfCustomerIdNotExists(createRentalRequest.getCustomerId());
 
         if (createRentalRequest.getStartDate().isAfter(createRentalRequest.getEndDate())) {
-            throw new InvalidRentDateException("Geçersiz kiralama tarihleri. Başlangıç tarihi, bitiş tarihinden önce olmalıdır.");
+            throw new InvalidRentDateException
+                    ("Geçersiz kiralama tarihleri. Başlangıç tarihi, bitiş tarihinden önce olmalıdır.");
         }
 
         Car car = this.carService.getByIdForOtherService(createRentalRequest.getCarId());
-        Customer customer = this.customerService.getByIdForOtherService(createRentalRequest.getCustomerId());
+        Customer customer = this.customerService
+                .getByIdForOtherService(createRentalRequest.getCustomerId());
 
         if (car.getState() != 1) {
             throw new CarCannotBeRentedException("Araç kiralanamaz durumda.");

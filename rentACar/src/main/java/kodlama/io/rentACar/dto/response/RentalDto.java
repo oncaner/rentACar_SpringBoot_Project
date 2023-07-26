@@ -1,6 +1,7 @@
-package kodlama.io.rentACar.dto;
+package kodlama.io.rentACar.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RentalDto {
 
     private Long id;

@@ -1,6 +1,6 @@
 package kodlama.io.rentACar.service;
 
-import kodlama.io.rentACar.dto.BrandDto;
+import kodlama.io.rentACar.dto.response.BrandDto;
 import kodlama.io.rentACar.dto.request.CreateBrandRequest;
 import kodlama.io.rentACar.dto.request.UpdateBrandRequest;
 

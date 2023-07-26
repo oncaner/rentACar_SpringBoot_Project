@@ -1,6 +1,6 @@
 package kodlama.io.rentACar.service;
 
-import kodlama.io.rentACar.dto.RentalDto;
+import kodlama.io.rentACar.dto.response.RentalDto;
 import kodlama.io.rentACar.dto.request.CreateRentalRequest;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.CustomerBusinessRules;
 import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.CustomerDto;
-import kodlama.io.rentACar.dto.CustomerDtoConverter;
+import kodlama.io.rentACar.dto.response.CustomerDto;
+import kodlama.io.rentACar.dto.converter.CustomerDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateCustomerRequest;
 import kodlama.io.rentACar.exception.CustomerNotFoundException;
 import kodlama.io.rentACar.model.Customer;
@@ -33,7 +33,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto getById(Long id) {
-        Customer customer = this.customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(String.format("Customer not found with %d", id)));
+        Customer customer = this.customerRepository.findById(id).orElseThrow(
+                () -> new CustomerNotFoundException(String.format("Customer not found with %d", id)));
 
         return this.customerDtoConverter.convertToDto(customer);
     }

@@ -1,17 +1,20 @@
-package kodlama.io.rentACar.dto;
+package kodlama.io.rentACar.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDto {
+@Builder
+public class ModelDto {
 
     private Long id;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
+    private String brandName;
+
 }

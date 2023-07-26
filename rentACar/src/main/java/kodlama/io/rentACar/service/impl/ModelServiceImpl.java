@@ -3,8 +3,8 @@ package kodlama.io.rentACar.service.impl;
 import kodlama.io.rentACar.businessrules.BrandBusinessRules;
 import kodlama.io.rentACar.businessrules.ModelBusinessRules;
 import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.ModelDto;
-import kodlama.io.rentACar.dto.ModelDtoConverter;
+import kodlama.io.rentACar.dto.response.ModelDto;
+import kodlama.io.rentACar.dto.converter.ModelDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateModelRequest;
 import kodlama.io.rentACar.dto.request.UpdateModelRequest;
 import kodlama.io.rentACar.exception.ModelNotFoundException;
@@ -52,7 +52,8 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public ModelDto getById(Long id) {
-        Model model = this.modelRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(String.format("Model not found with: %d", id)));
+        Model model = this.modelRepository.findById(id).orElseThrow(
+                () -> new ModelNotFoundException(String.format("Model not found with: %d", id)));
 
         return this.modelDtoConverter.convertToDto(model);
     }
@@ -73,7 +74,8 @@ public class ModelServiceImpl implements ModelService {
         this.modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
 
         Model oldModel = this.modelRepository.findById(updateModelRequest.getId()).orElseThrow();
-        Brand brand = this.modelMapperService.forResponse().map(this.brandService.getById(oldModel.getBrand().getId()),Brand.class);
+        Brand brand = this.modelMapperService.forResponse()
+                .map(this.brandService.getById(oldModel.getBrand().getId()),Brand.class);
 
         Model model = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
         model.setBrand(brand);

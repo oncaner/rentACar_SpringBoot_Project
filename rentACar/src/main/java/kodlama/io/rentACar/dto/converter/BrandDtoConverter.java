@@ -1,5 +1,6 @@
-package kodlama.io.rentACar.dto;
+package kodlama.io.rentACar.dto.converter;
 
+import kodlama.io.rentACar.dto.response.BrandDto;
 import kodlama.io.rentACar.model.Brand;
 import org.springframework.stereotype.Component;
 

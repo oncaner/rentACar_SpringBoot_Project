@@ -1,7 +1,7 @@
 package kodlama.io.rentACar.controller;
 
 import jakarta.validation.Valid;
-import kodlama.io.rentACar.dto.BrandDto;
+import kodlama.io.rentACar.dto.response.BrandDto;
 import kodlama.io.rentACar.dto.request.CreateBrandRequest;
 import kodlama.io.rentACar.dto.request.UpdateBrandRequest;
 import kodlama.io.rentACar.service.BrandService;

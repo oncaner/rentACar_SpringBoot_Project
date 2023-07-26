@@ -2,15 +2,17 @@ package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.CustomerBusinessRules;
 import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.CustomerDto;
-import kodlama.io.rentACar.dto.CustomerDtoConverter;
+import kodlama.io.rentACar.dto.converter.CustomerDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateCustomerRequest;
+import kodlama.io.rentACar.dto.response.CustomerDto;
 import kodlama.io.rentACar.exception.CustomerNotFoundException;
 import kodlama.io.rentACar.model.Customer;
 import kodlama.io.rentACar.repository.CustomerRepository;
-import kodlama.io.rentACar.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -19,57 +21,51 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 class CustomerServiceImplTest {
 
-    private CustomerService customerService;
+    @InjectMocks
+    private CustomerServiceImpl customerService;
+    @Mock
     private CustomerRepository customerRepository;
+    @Mock
     private ModelMapperService modelMapperService;
+    @Mock
     private ModelMapper modelMapper;
+    @Mock
     private CustomerBusinessRules customerBusinessRules;
+    @Mock
     private CustomerDtoConverter customerDtoConverter;
 
     @BeforeEach
     void setUp() {
-
-        customerRepository = mock(CustomerRepository.class);
-        modelMapperService = mock(ModelMapperService.class);
-        modelMapper = mock(ModelMapper.class);
-        customerBusinessRules = mock(CustomerBusinessRules.class);
-        customerDtoConverter = mock(CustomerDtoConverter.class);
-        customerService = new CustomerServiceImpl(customerRepository, modelMapperService,
-                customerBusinessRules, customerDtoConverter);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testGetAll_whenGetAllCustomersCalled_shouldReturnListOfCustomerDto() {
 
-        Customer customer1 = new Customer(1L, "firstname1", "lastname1", List.of());
-        Customer customer2 = new Customer(2L, "firstname2", "lastname2", List.of());
+        Customer customer1 = Customer.builder().id(1L).firstName("firstname").lastName("lastname").build();
         List<Customer> customers = new ArrayList<>();
         customers.add(customer1);
-        customers.add(customer2);
 
-        CustomerDto customerDto1 = new CustomerDto(1L, "firstname1", "lastname1");
-        CustomerDto customerDto2 = new CustomerDto(2L, "firstname2", "lastname2");
+        CustomerDto customerDto1 = CustomerDto.builder()
+                .id(customer1.getId()).firstName(customer1.getFirstName())
+                .lastName(customer1.getLastName()).build();
         List<CustomerDto> customerDtos = new ArrayList<>();
         customerDtos.add(customerDto1);
-        customerDtos.add(customerDto2);
 
         when(customerRepository.findAll()).thenReturn(customers);
         when(customerDtoConverter.convertToDto(customer1)).thenReturn(customerDto1);
-        when(customerDtoConverter.convertToDto(customer2)).thenReturn(customerDto2);
 
         List<CustomerDto> result = customerService.getAll();
 
         verify(customerRepository).findAll();
         verify(customerDtoConverter).convertToDto(customer1);
-        verify(customerDtoConverter).convertToDto(customer2);
 
         assertEquals(result, customerDtos);
     }
@@ -79,8 +75,11 @@ class CustomerServiceImplTest {
 
         Long id = 1L;
 
-        Customer customer = new Customer(1L, "firstname", "lastname", List.of());
-        CustomerDto customerDto = new CustomerDto(1L, "firstname", "lastname");
+        Customer customer = Customer.builder().id(1L).firstName("firstname").lastName("lastname").build();
+
+        CustomerDto customerDto = CustomerDto.builder()
+                .id(customer.getId()).firstName(customer.getFirstName())
+                .lastName(customer.getLastName()).build();
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
         when(customerDtoConverter.convertToDto(customer)).thenReturn(customerDto);
@@ -110,7 +109,7 @@ class CustomerServiceImplTest {
 
         Long id = 1L;
 
-        Customer customer = new Customer(1L, "firstname", "lastname", List.of());
+        Customer customer = Customer.builder().id(1L).firstName("firstname").lastName("lastname").build();
 
         when(customerRepository.findById(id)).thenReturn(Optional.of(customer));
 
@@ -137,10 +136,15 @@ class CustomerServiceImplTest {
     @Test
     public void testCreate_whenCreateCustomerCalledWithRequest_shouldReturnCustomerDto() {
 
-        CreateCustomerRequest request = new CreateCustomerRequest("firstname", "lastname");
+        CreateCustomerRequest request = CreateCustomerRequest.builder()
+                .firstName("firstname").lastName("lastname").build();
 
-        Customer customer = new Customer(1L, request.getFirstName(), request.getLastName(), List.of());
-        CustomerDto customerDto = new CustomerDto(1L, customer.getFirstName(), customer.getLastName());
+        Customer customer = Customer.builder()
+                .id(1L).firstName(request.getFirstName()).lastName(request.getLastName()).build();
+
+        CustomerDto customerDto = CustomerDto.builder()
+                .id(customer.getId()).firstName(customer.getFirstName())
+                .lastName(customer.getLastName()).build();
 
         when(modelMapperService.forRequest()).thenReturn(modelMapper);
         when(modelMapper.map(request, Customer.class)).thenReturn(customer);
@@ -180,12 +184,4 @@ class CustomerServiceImplTest {
         verify(customerBusinessRules).checkIfCustomerIdNotExists(id);
         verifyNoInteractions(customerRepository);
     }
-
 }
-
-
-
-
-
-
-

@@ -2,10 +2,10 @@ package kodlama.io.rentACar.service.impl;
 
 import kodlama.io.rentACar.businessrules.BrandBusinessRules;
 import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.BrandDto;
-import kodlama.io.rentACar.dto.BrandDtoConverter;
+import kodlama.io.rentACar.dto.converter.BrandDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateBrandRequest;
 import kodlama.io.rentACar.dto.request.UpdateBrandRequest;
+import kodlama.io.rentACar.dto.response.BrandDto;
 import kodlama.io.rentACar.exception.BrandNotFoundException;
 import kodlama.io.rentACar.model.Brand;
 import kodlama.io.rentACar.repository.BrandRepository;
@@ -27,29 +27,26 @@ public class BrandServiceImpl implements BrandService {
     public List<BrandDto> getAll() {
         List<Brand> brands = this.brandRepository.findAll();
 
-        return brands.stream()
-                .map(this.brandDtoConverter::convertToDto).toList();
+        return brands.stream().map(this.brandDtoConverter::convertToDto).toList();
     }
 
     @Override
     public List<BrandDto> getAllByOrderByNameDesc() {
         List<Brand> brands = this.brandRepository.findAllByOrderByNameDesc();
 
-        return brands.stream()
-                .map(this.brandDtoConverter::convertToDto).toList();
+        return brands.stream().map(this.brandDtoConverter::convertToDto).toList();
     }
 
     @Override
     public List<BrandDto> getAllByOrderByNameAsc() {
         List<Brand> brands = this.brandRepository.findAllByOrderByNameAsc();
 
-        return brands.stream()
-                .map(this.brandDtoConverter::convertToDto).toList();
+        return brands.stream().map(this.brandDtoConverter::convertToDto).toList();
     }
 
     @Override
     public BrandDto getById(Long id) {
-        Brand brand = this.brandRepository.findById(id).orElseThrow(() -> new BrandNotFoundException(String.format("Brand not found with: %d", id)));
+        Brand brand = this.brandRepository.findById(id).orElseThrow(() ->new BrandNotFoundException(String.format("Brand not found with: %d", id)));
 
         return this.brandDtoConverter.convertToDto(brand);
     }

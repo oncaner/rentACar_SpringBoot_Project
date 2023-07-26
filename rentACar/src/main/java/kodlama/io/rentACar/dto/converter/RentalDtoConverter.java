@@ -1,10 +1,9 @@
-package kodlama.io.rentACar.dto;
+package kodlama.io.rentACar.dto.converter;
 
+import kodlama.io.rentACar.dto.response.RentalDto;
 import kodlama.io.rentACar.model.Car;
 import kodlama.io.rentACar.model.Customer;
 import kodlama.io.rentACar.model.Rental;
-import kodlama.io.rentACar.repository.CarRepository;
-import kodlama.io.rentACar.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

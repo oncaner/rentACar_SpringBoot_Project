@@ -1,7 +1,7 @@
 package kodlama.io.rentACar.controller;
 
 import jakarta.validation.Valid;
-import kodlama.io.rentACar.dto.RentalDto;
+import kodlama.io.rentACar.dto.response.RentalDto;
 import kodlama.io.rentACar.dto.request.CreateRentalRequest;
 import kodlama.io.rentACar.service.RentalService;
 import lombok.AllArgsConstructor;

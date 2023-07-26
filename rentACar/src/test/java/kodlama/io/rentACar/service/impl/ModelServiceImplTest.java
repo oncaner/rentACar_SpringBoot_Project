@@ -3,10 +3,10 @@ package kodlama.io.rentACar.service.impl;
 import kodlama.io.rentACar.businessrules.BrandBusinessRules;
 import kodlama.io.rentACar.businessrules.ModelBusinessRules;
 import kodlama.io.rentACar.configuration.mapper.ModelMapperService;
-import kodlama.io.rentACar.dto.ModelDto;
-import kodlama.io.rentACar.dto.ModelDtoConverter;
+import kodlama.io.rentACar.dto.converter.ModelDtoConverter;
 import kodlama.io.rentACar.dto.request.CreateModelRequest;
 import kodlama.io.rentACar.dto.request.UpdateModelRequest;
+import kodlama.io.rentACar.dto.response.ModelDto;
 import kodlama.io.rentACar.exception.BrandNotFoundException;
 import kodlama.io.rentACar.exception.ModelNameExistsException;
 import kodlama.io.rentACar.exception.ModelNotFoundException;
@@ -14,9 +14,11 @@ import kodlama.io.rentACar.model.Brand;
 import kodlama.io.rentACar.model.Model;
 import kodlama.io.rentACar.repository.ModelRepository;
 import kodlama.io.rentACar.service.BrandService;
-import kodlama.io.rentACar.service.ModelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
@@ -25,60 +27,52 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 class ModelServiceImplTest {
 
-    private ModelService modelService;
+    @InjectMocks
+    private ModelServiceImpl modelService;
+    @Mock
     private BrandService brandService;
+    @Mock
     private ModelMapperService modelMapperService;
+    @Mock
     private ModelMapper modelMapper;
+    @Mock
     private ModelRepository modelRepository;
+    @Mock
     private ModelBusinessRules modelBusinessRules;
+    @Mock
     private BrandBusinessRules brandBusinessRules;
+    @Mock
     private ModelDtoConverter modelDtoConverter;
 
     @BeforeEach
     void setUp() {
-
-        brandService = mock(BrandService.class);
-        modelMapperService = mock(ModelMapperService.class);
-        modelMapper = mock(ModelMapper.class);
-        modelRepository = mock(ModelRepository.class);
-        modelBusinessRules = mock(ModelBusinessRules.class);
-        brandBusinessRules = mock(BrandBusinessRules.class);
-        modelDtoConverter = mock(ModelDtoConverter.class);
-
-        modelService = new ModelServiceImpl(modelRepository, brandService, modelMapperService, modelBusinessRules, brandBusinessRules, modelDtoConverter);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testGetAll_whenGetAllModelCalled_shouldReturnListOfModelDto() {
         List<Model> models = new ArrayList<>();
-        Model model1 = new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of());
-        Model model2 = new Model(2L, "model2", new Brand(2L, "brand2", List.of()), List.of());
+        Model model1 = Model.builder().build();
         models.add(model1);
-        models.add(model2);
 
         List<ModelDto> modelDtos = new ArrayList<>();
-        ModelDto modelDto1 = new ModelDto(1L, "model1", "brand1");
-        ModelDto modelDto2 = new ModelDto(2L, "model2", "brand2");
+        ModelDto modelDto1 = ModelDto.builder().build();
         modelDtos.add(modelDto1);
-        modelDtos.add(modelDto2);
 
         when(modelRepository.findAll()).thenReturn(models);
         when(modelDtoConverter.convertToDto(model1)).thenReturn(modelDto1);
-        when(modelDtoConverter.convertToDto(model2)).thenReturn(modelDto2);
 
         List<ModelDto> result = modelService.getAll();
 
         verify(modelRepository).findAll();
         verify(modelDtoConverter).convertToDto(model1);
-        verify(modelDtoConverter).convertToDto(model2);
 
         assertEquals(result, modelDtos);
     }
@@ -86,26 +80,20 @@ class ModelServiceImplTest {
     @Test
     public void testGetAllByOrderByNameAsc_whenGetAllModelCalled_shouldReturnListOfModelDto() {
         List<Model> models = new ArrayList<>();
-        Model model1 = new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of());
-        Model model2 = new Model(2L, "model2", new Brand(2L, "brand2", List.of()), List.of());
+        Model model1 = Model.builder().build();
         models.add(model1);
-        models.add(model2);
 
         List<ModelDto> modelDtos = new ArrayList<>();
-        ModelDto modelDto1 = new ModelDto(1L, "model1", "brand1");
-        ModelDto modelDto2 = new ModelDto(2L, "model2", "brand2");
+        ModelDto modelDto1 = ModelDto.builder().build();
         modelDtos.add(modelDto1);
-        modelDtos.add(modelDto2);
 
         when(modelRepository.findAllByOrderByNameAsc()).thenReturn(models);
         when(modelDtoConverter.convertToDto(model1)).thenReturn(modelDto1);
-        when(modelDtoConverter.convertToDto(model2)).thenReturn(modelDto2);
 
         List<ModelDto> result = modelService.getAllByOrderByNameAsc();
 
         verify(modelRepository).findAllByOrderByNameAsc();
         verify(modelDtoConverter).convertToDto(model1);
-        verify(modelDtoConverter).convertToDto(model2);
 
         assertEquals(result, modelDtos);
     }
@@ -113,26 +101,20 @@ class ModelServiceImplTest {
     @Test
     public void testGetAllByOrderByNameDesc_whenGetAllModelCalled_shouldReturnListOfModelDto() {
         List<Model> models = new ArrayList<>();
-        Model model1 = new Model(1L, "model1", new Brand(1L, "brand1", List.of()), List.of());
-        Model model2 = new Model(2L, "model2", new Brand(2L, "brand2", List.of()), List.of());
+        Model model1 = Model.builder().build();
         models.add(model1);
-        models.add(model2);
 
         List<ModelDto> modelDtos = new ArrayList<>();
-        ModelDto modelDto1 = new ModelDto(1L, "model1", "brand1");
-        ModelDto modelDto2 = new ModelDto(2L, "model2", "brand2");
+        ModelDto modelDto1 = ModelDto.builder().build();
         modelDtos.add(modelDto1);
-        modelDtos.add(modelDto2);
 
         when(modelRepository.findAllByOrderByNameDesc()).thenReturn(models);
         when(modelDtoConverter.convertToDto(model1)).thenReturn(modelDto1);
-        when(modelDtoConverter.convertToDto(model2)).thenReturn(modelDto2);
 
         List<ModelDto> result = modelService.getAllByOrderByNameDesc();
 
         verify(modelRepository).findAllByOrderByNameDesc();
         verify(modelDtoConverter).convertToDto(model1);
-        verify(modelDtoConverter).convertToDto(model2);
 
         assertEquals(result, modelDtos);
     }
@@ -140,117 +122,125 @@ class ModelServiceImplTest {
     @Test
     public void testGetById_whenModelIdExists_shouldReturnModelDto() {
 
-        Model model = new Model(1L, "model", new Brand(1L, "brand", List.of()), List.of());
-        ModelDto modelDto = new ModelDto(1L, "model", "brand");
+        Long id = 1L;
 
-        when(modelRepository.findById(1L)).thenReturn(Optional.of(model));
+        Model model = Model.builder().id(id).build();
+        ModelDto modelDto = ModelDto.builder().id(id).build();
+
+        when(modelRepository.findById(id)).thenReturn(Optional.of(model));
         when(modelDtoConverter.convertToDto(model)).thenReturn(modelDto);
 
-        ModelDto result = modelService.getById(1L);
+        ModelDto result = modelService.getById(id);
 
-        verify(modelRepository).findById(1L);
+        verify(modelRepository).findById(id);
         verify(modelDtoConverter).convertToDto(model);
 
         assertEquals(result, modelDto);
-
     }
 
     @Test
     public void testGetById_whenModelIdDoesNotExist_shouldThrowModelNotFoundException() {
 
-        when(modelRepository.findById(1L)).thenReturn(Optional.empty());
+        Long id = 1L;
 
-        assertThrows(ModelNotFoundException.class, () -> modelService.getById(1L));
+        when(modelRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(ModelNotFoundException.class, () -> modelService.getById(id));
 
         verifyNoInteractions(modelDtoConverter);
-
     }
 
     @Test
     public void testCreate_whenCreateModelCalledWithRequest_shouldReturnModelDto() {
 
-        CreateModelRequest createModelRequest = new CreateModelRequest();
-        createModelRequest.setName("model");
-        createModelRequest.setBrandId(1L);
+        Long id = 1L;
 
-        Model model = new Model(1L, "model", new Brand(1L, "brand", List.of()), List.of());
+        CreateModelRequest request = CreateModelRequest.builder()
+                .name("model").brandId(1L).build();
 
-        ModelDto modelDto = new ModelDto();
-        modelDto.setId(1L);
-        modelDto.setName("model");
-        modelDto.setBrandName("brand");
+        Model model = Model.builder().id(id).name(request.getName())
+                .brand(Brand.builder().id(request.getBrandId()).name("brand").build()).build();
+
+        ModelDto modelDto = ModelDto
+                .builder().id(model.getId()).name(model.getName())
+                .brandName(model.getBrand().getName()).build();
 
         when(modelMapperService.forRequest()).thenReturn(modelMapper);
-        when(modelMapper.map(createModelRequest, Model.class)).thenReturn(model);
+        when(modelMapper.map(request, Model.class)).thenReturn(model);
         when(modelRepository.save(model)).thenReturn(model);
         when(modelDtoConverter.convertToDto(model)).thenReturn(modelDto);
 
-        ModelDto result = modelService.create(createModelRequest);
+        ModelDto result = modelService.create(request);
 
         verify(modelMapperService).forRequest();
-        verify(modelMapper).map(createModelRequest, Model.class);
+        verify(modelMapper).map(request, Model.class);
         verify(modelRepository).save(model);
         verify(modelDtoConverter).convertToDto(model);
 
         assertEquals(result, modelDto);
-
     }
 
     @Test
     public void testCreate_whenModelNameExists_shouldThrowModelNameExistsException() {
 
-        CreateModelRequest createModelRequest = new CreateModelRequest("model", 1L);
+        CreateModelRequest request = CreateModelRequest.builder().name("model").build();
 
-        doThrow(ModelNameExistsException.class).when(modelBusinessRules).checkIfModelNameExists("model");
+        doThrow(ModelNameExistsException.class).when(modelBusinessRules)
+                .checkIfModelNameExists(request.getName());
 
-        assertThrows(ModelNameExistsException.class, () -> modelService.create(createModelRequest));
+        assertThrows(ModelNameExistsException.class, () -> modelService.create(request));
 
-        verify(modelBusinessRules).checkIfModelNameExists("model");
+        verify(modelBusinessRules).checkIfModelNameExists(request.getName());
         verifyNoInteractions(modelMapperService, modelMapper, modelDtoConverter, modelRepository);
-
     }
 
     @Test
     public void testCreate_whenBrandIdDoesNotExists_shouldThrowModelNotFoundException() {
 
-        CreateModelRequest createModelRequest = new CreateModelRequest("model", 1L);
+        Long brandId = 1L;
 
-        doThrow(BrandNotFoundException.class).when(brandBusinessRules).checkIfBrandIdNotExists(1L);
+        CreateModelRequest request = CreateModelRequest.builder().brandId(brandId).build();
 
-        assertThrows(BrandNotFoundException.class, () -> modelService.create(createModelRequest));
+        doThrow(BrandNotFoundException.class).when(brandBusinessRules)
+                .checkIfBrandIdNotExists(request.getBrandId());
 
-        verify(brandBusinessRules).checkIfBrandIdNotExists(1L);
+        assertThrows(BrandNotFoundException.class, () -> modelService.create(request));
+
+        verify(brandBusinessRules).checkIfBrandIdNotExists(request.getBrandId());
         verifyNoInteractions(modelMapperService, modelMapper, modelDtoConverter, modelRepository);
-
     }
 
     @Test
     public void testUpdate_whenUpdateModelCalledWithRequest_shouldReturnModelDto() {
 
-        UpdateModelRequest updateModelRequest = new UpdateModelRequest(1L, "model");
+        Long id = 1L;
 
-        Brand brand = new Brand(1L, "brand", List.of());
-        Model oldModel = new Model(1L, "oldModel", brand, List.of());
-        Model updatedModel = new Model(1L, "model", brand, List.of());
-        ModelDto modelDto = new ModelDto(1L, "model", "brand");
+        UpdateModelRequest request = UpdateModelRequest.builder().id(id).name("model").build();
 
-        when(modelRepository.findById(1L)).thenReturn(Optional.of(oldModel));
+        Model model = Model.builder().id(request.getId()).name(request.getName())
+                .brand(Brand.builder().id(id).name("brand").build()).build();
+
+        ModelDto modelDto = ModelDto.builder()
+                .id(model.getId()).name(model.getName()).brandName(model.getBrand().getName()).build();
+
+        when(modelRepository.findById(request.getId())).thenReturn(Optional.of(model));
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
-        when(modelMapper.map(brandService.getById(brand.getId()), Brand.class)).thenReturn(brand);
+        when(modelMapper.map(brandService.getById(model.getId()), Brand.class))
+                .thenReturn(model.getBrand());
         when(modelMapperService.forRequest()).thenReturn(modelMapper);
-        when(modelMapper.map(updateModelRequest, Model.class)).thenReturn(updatedModel);
-        when(modelRepository.save(updatedModel)).thenReturn(updatedModel);
-        when(modelDtoConverter.convertToDto(updatedModel)).thenReturn(modelDto);
+        when(modelMapper.map(request, Model.class)).thenReturn(model);
+        when(modelRepository.save(model)).thenReturn(model);
+        when(modelDtoConverter.convertToDto(model)).thenReturn(modelDto);
 
-        ModelDto result = modelService.update(updateModelRequest);
+        ModelDto result = modelService.update(request);
 
-        verify(modelRepository).findById(1L);
+        verify(modelRepository).findById(request.getId());
         verify(modelMapperService).forResponse();
-        verify(modelMapper).map(brandService.getById(brand.getId()), Brand.class);
+        verify(modelMapper).map(brandService.getById(model.getBrand().getId()), Brand.class);
         verify(modelMapperService).forRequest();
-        verify(modelMapper).map(updateModelRequest, Model.class);
-        verify(modelRepository).save(updatedModel);
-        verify(modelDtoConverter).convertToDto(updatedModel);
+        verify(modelMapper).map(request, Model.class);
+        verify(modelRepository).save(model);
+        verify(modelDtoConverter).convertToDto(model);
 
         assertEquals(result, modelDto);
     }
@@ -258,23 +248,24 @@ class ModelServiceImplTest {
     @Test
     public void testUpdate_whenModelNameExists_shouldThrowModelNameExistsException() {
 
-        UpdateModelRequest request = new UpdateModelRequest(1L, "model");
+        UpdateModelRequest request = UpdateModelRequest.builder().name("model").build();
 
-        doThrow(ModelNameExistsException.class).when(modelBusinessRules).checkIfModelNameExists(request.getName());
+        doThrow(ModelNameExistsException.class).when(modelBusinessRules)
+                .checkIfModelNameExists(request.getName());
 
         assertThrows(ModelNameExistsException.class, () -> modelService.update(request));
 
-        verify(modelBusinessRules).checkIfModelNameExists("model");
+        verify(modelBusinessRules).checkIfModelNameExists(request.getName());
         verifyNoInteractions(modelMapperService, modelMapper, modelDtoConverter, modelRepository);
-
     }
 
     @Test
     public void testUpdate_whenModelIdDoesNotExist_shouldThrowModelNotFoundException() {
 
-        UpdateModelRequest request = new UpdateModelRequest(1L, "model");
+        UpdateModelRequest request = UpdateModelRequest.builder().id(1L).build();
 
-        doThrow(ModelNotFoundException.class).when(modelBusinessRules).checkIfModelIdNotExists(request.getId());
+        doThrow(ModelNotFoundException.class).when(modelBusinessRules)
+                .checkIfModelIdNotExists(request.getId());
 
         assertThrows(ModelNotFoundException.class, () -> modelService.update(request));
 
@@ -291,7 +282,6 @@ class ModelServiceImplTest {
 
         verify(modelBusinessRules).checkIfModelIdNotExists(id);
         verify(modelRepository).deleteById(id);
-
     }
 
     @Test
@@ -305,6 +295,5 @@ class ModelServiceImplTest {
 
         verify(modelBusinessRules).checkIfModelIdNotExists(id);
         verifyNoInteractions(modelRepository);
-
     }
 }

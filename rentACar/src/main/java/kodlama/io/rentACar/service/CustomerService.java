@@ -1,6 +1,6 @@
 package kodlama.io.rentACar.service;
 
-import kodlama.io.rentACar.dto.CustomerDto;
+import kodlama.io.rentACar.dto.response.CustomerDto;
 import kodlama.io.rentACar.dto.request.CreateCustomerRequest;
 import kodlama.io.rentACar.model.Customer;
 
