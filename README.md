@@ -1,7 +1,40 @@
-# rentACar_SpringBoot_Project
+# Rent A Car
 
-![BrandsController](https://user-images.githubusercontent.com/86167203/227810342-96a0be0c-72f6-4467-8e7a-add53a9a0a44.jpg)
+Bu proje, Spring Boot kullanarak geliştirilmiş bir Rent A Car uygulamasıdır.
+Müşterilerin araç kiralayabileceği basit bir otomobil kiralama sistemidir.
+Proje, Spring JPA kullanarak PostgreSQL veritabanını yönetir ve aynı zamanda unit testler ile güvenilir bir yapı sunar.
 
-![CarsController](https://user-images.githubusercontent.com/86167203/227810377-bf12a8e7-06f8-4c36-afa0-9d601bd21b9f.jpg)
 
-![ModelsController](https://user-images.githubusercontent.com/86167203/227810404-f9fa4343-7bf8-48bf-82a3-67075093083c.jpg)
+## Teknolojiler ve Araçlar
+
+```
+- Spring Boot
+- Spring JPA
+- PostgreSQL
+- Unit Test
+- Maven
+```
+
+## Model ve İlişkiler
+
+```
+Proje, aşağıdaki ana modeller ve aralarındaki ilişkilerle yapılandırılmıştır:
+
+Brand: Otomobil markalarını temsil eder.
+Model: Her marka için mevcut olan otomobil modellerini temsil eder.
+Car: Rent A Car sistemindeki araçları temsil eder ve her biri bir model ile ilişkilidir.
+Customer: Müşteri bilgilerini temsil eder.
+Rental: Araç kiralama işlemlerini temsil eder ve her biri bir müşteri ve bir araç ile ilişkilidir.
+```
+
+## Çalıştırma
+
+```
+Projeyi çalıştırmak için aşağıdaki adımları takip edin:
+
+1. Proje klasörünü yerel makinenize klonlayın.
+2. PostgreSQL veritabanı oluşturun ve bağlantı bilgilerini application.properties dosyasında yapılandırın.
+3. RentACarApplication'a sağ tıklayıp 'Run' ederek çalıştırabilirsiniz.
+
+Uygulama başarıyla başladıktan sonra, http://localhost:8080 adresinden Rent A Car uygulamasına erişebilirsiniz.
+```
